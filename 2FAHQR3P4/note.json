@@ -1,0 +1,27 @@
+{
+  "paragraphs": [
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1590146853224_1906135320",
+      "id": "20200522-112733_758055560",
+      "dateCreated": "2020-05-22 11:27:33.224",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "BDA-Predicting-Forest-Cover-with-Decision-Trees",
+  "id": "2FAHQR3P4",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
