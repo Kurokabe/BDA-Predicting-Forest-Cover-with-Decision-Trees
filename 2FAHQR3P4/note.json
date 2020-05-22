@@ -2,7 +2,20 @@
   "paragraphs": [
     {
       "user": "anonymous",
-      "config": {},
+      "dateUpdated": "2020-05-22 13:50:57.254",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
       "settings": {
         "params": {},
         "forms": {}
@@ -11,6 +24,1448 @@
       "jobName": "paragraph_1590146853224_1906135320",
       "id": "20200522-112733_758055560",
       "dateCreated": "2020-05-22 11:27:33.224",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Download the dataset",
+      "text": "%sh\n# Download \ncd /data\nif [[ ! -f covtype.data.gz ]]\nthen\n    echo \"Downloading covtype.data.gz\"\n    curl --silent -O https://archive.ics.uci.edu/ml/machine-learning-databases/covtype/covtype.data.gz\nfi",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:50:57.304",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "sh",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/sh",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1590147199939_1934338954",
+      "id": "20200522-113319_918821589",
+      "dateCreated": "2020-05-22 11:33:19.939",
+      "dateStarted": "2020-05-22 13:50:57.368",
+      "dateFinished": "2020-05-22 13:50:57.410",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Read the dataset",
+      "text": "%spark\n// Specify path to downloaded log file\n// Note that Spark is able to read directly gzipped files\nval datasetPath \u003d \"/data/covtype.data.gz\"\n\nval dataset \u003d spark.read.\n option(\"inferSchema\", true).\n option(\"header\", false).\n csv(datasetPath)",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:50:57.466",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "datasetPath: String \u003d /data/covtype.data.gz\ndataset: org.apache.spark.sql.DataFrame \u003d [_c0: int, _c1: int ... 53 more fields]\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d396",
+            "http://172.17.0.2:4040/jobs/job?id\u003d397"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590147409389_-2011877418",
+      "id": "20200522-113649_588854684",
+      "dateCreated": "2020-05-22 11:36:49.389",
+      "dateStarted": "2020-05-22 13:50:57.510",
+      "dateFinished": "2020-05-22 13:51:00.951",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Rename columns",
+      "text": "val colNames \u003d Seq(\n \"Elevation\", \"Aspect\", \"Slope\",\n \"Horizontal_Distance_To_Hydrology\", \"Vertical_Distance_To_Hydrology\",\n \"Horizontal_Distance_To_Roadways\",\n \"Hillshade_9am\", \"Hillshade_Noon\", \"Hillshade_3pm\",\n \"Horizontal_Distance_To_Fire_Points\"\n ) ++ (\n (0 until 4).map(i \u003d\u003e s\"Wilderness_Area_$i\")\n ) ++ (\n (0 until 40).map(i \u003d\u003e s\"Soil_Type_$i\")\n ) ++ Seq(\"Cover_Type\")\n \nval data \u003d dataset.toDF(colNames:_*).withColumn(\"Cover_Type\", $\"Cover_Type\".cast(\"double\"))\n\ndata.head",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:51:01.020",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 91.0,
+              "optionOpen": false
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "colNames: Seq[String] \u003d List(Elevation, Aspect, Slope, Horizontal_Distance_To_Hydrology, Vertical_Distance_To_Hydrology, Horizontal_Distance_To_Roadways, Hillshade_9am, Hillshade_Noon, Hillshade_3pm, Horizontal_Distance_To_Fire_Points, Wilderness_Area_0, Wilderness_Area_1, Wilderness_Area_2, Wilderness_Area_3, Soil_Type_0, Soil_Type_1, Soil_Type_2, Soil_Type_3, Soil_Type_4, Soil_Type_5, Soil_Type_6, Soil_Type_7, Soil_Type_8, Soil_Type_9, Soil_Type_10, Soil_Type_11, Soil_Type_12, Soil_Type_13, Soil_Type_14, Soil_Type_15, Soil_Type_16, Soil_Type_17, Soil_Type_18, Soil_Type_19, Soil_Type_20, Soil_Type_21, Soil_Type_22, Soil_Type_23, Soil_Type_24, Soil_Type_25, Soil_Type_26, Soil_Type_27, Soil_Type_28, Soil_Type_29, Soil_Type_30, Soil_Type_31, Soil_Type_32, Soil_Type_33, Soil_Type_34, Soil_..."
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d398"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590147203086_-1613964782",
+      "id": "20200522-113323_727143862",
+      "dateCreated": "2020-05-22 11:33:23.086",
+      "dateStarted": "2020-05-22 13:51:01.061",
+      "dateFinished": "2020-05-22 13:51:01.514",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Split the datas",
+      "text": "val Array(trainData, testData) \u003d data.randomSplit(Array(0.9, 0.1))\ntrainData.cache()\ntestData.cache()",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:51:01.560",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "trainData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Elevation: int, Aspect: int ... 53 more fields]\ntestData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Elevation: int, Aspect: int ... 53 more fields]\nres14: testData.type \u003d [Elevation: int, Aspect: int ... 53 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1590147201725_-1542438554",
+      "id": "20200522-113321_2092396677",
+      "dateCreated": "2020-05-22 11:33:21.725",
+      "dateStarted": "2020-05-22 13:51:01.627",
+      "dateFinished": "2020-05-22 13:51:02.222",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Vectorize datas",
+      "text": "import org.apache.spark.ml.feature.VectorAssembler\n\nval inputCols \u003d trainData.columns.filter(_ !\u003d \"Cover_Type\")\nval assembler \u003d new VectorAssembler().setInputCols(inputCols).setOutputCol(\"featureVector\")\nval assembledTrainData \u003d assembler.transform(trainData)\n\nassembledTrainData.select(\"featureVector\").show(truncate \u003d false)",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:51:02.224",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----------------------------------------------------------------------------------------------------+\n|featureVector                                                                                       |\n+----------------------------------------------------------------------------------------------------+\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1860.0,18.0,13.0,95.0,15.0,90.0,210.0,213.0,138.0,780.0,1.0,1.0])  |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1861.0,35.0,14.0,60.0,11.0,85.0,218.0,209.0,124.0,832.0,1.0,1.0])  |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1863.0,37.0,17.0,120.0,18.0,90.0,217.0,202.0,115.0,769.0,1.0,1.0]) |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1866.0,23.0,14.0,85.0,16.0,108.0,212.0,210.0,133.0,819.0,1.0,1.0]) |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1867.0,20.0,15.0,108.0,19.0,120.0,208.0,206.0,132.0,808.0,1.0,1.0])|\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1868.0,27.0,16.0,67.0,17.0,95.0,212.0,204.0,125.0,859.0,1.0,1.0])  |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,18],[1871.0,22.0,22.0,60.0,12.0,85.0,200.0,187.0,115.0,792.0,1.0,1.0])  |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1871.0,36.0,19.0,134.0,26.0,120.0,215.0,194.0,107.0,797.0,1.0,1.0])|\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1871.0,37.0,19.0,120.0,29.0,90.0,216.0,195.0,107.0,759.0,1.0,1.0]) |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1872.0,27.0,16.0,95.0,22.0,124.0,212.0,205.0,126.0,847.0,1.0,1.0]) |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1872.0,27.0,21.0,108.0,30.0,67.0,206.0,190.0,112.0,713.0,1.0,1.0]) |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,14],[1872.0,35.0,21.0,120.0,18.0,85.0,213.0,189.0,104.0,797.0,1.0,1.0]) |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1873.0,30.0,19.0,67.0,21.0,85.0,211.0,195.0,114.0,899.0,1.0,1.0])  |\n|(54,[0,1,2,5,6,7,8,9,13,18],[1874.0,18.0,14.0,90.0,208.0,209.0,135.0,793.0,1.0,1.0])                |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1876.0,25.0,17.0,124.0,26.0,150.0,209.0,200.0,123.0,836.0,1.0,1.0])|\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1876.0,29.0,19.0,124.0,34.0,90.0,210.0,195.0,115.0,750.0,1.0,1.0]) |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1877.0,19.0,18.0,85.0,25.0,108.0,204.0,199.0,127.0,886.0,1.0,1.0]) |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,18],[1877.0,27.0,24.0,90.0,18.0,95.0,201.0,179.0,104.0,780.0,1.0,1.0])  |\n|(54,[0,1,2,3,4,5,6,7,8,9,13,15],[1877.0,28.0,22.0,127.0,35.0,85.0,205.0,185.0,107.0,706.0,1.0,1.0]) |\n|(54,[0,1,2,5,6,7,8,9,13,18],[1879.0,18.0,14.0,120.0,208.0,210.0,137.0,767.0,1.0,1.0])               |\n+----------------------------------------------------------------------------------------------------+\nonly showing top 20 rows\n\nimport org.apache.spark.ml.feature.VectorAssembler\ninputCols: Array[String] \u003d Array(Elevation, Aspect, Slope, Horizontal_Distance_To_Hydrology, Vertical_Distance_To_Hydrology, Horizontal_Distance_To_Roadways, Hillshade_9am, Hillshade_Noon, Hillshade_3pm, Horizontal_Distance_To_Fire_Points, Wilderness_Area_0, Wilderness_Area_1, Wilderness_Area_2, Wilderness_Area_3, Soil_Type_0, Soil_Type_1, Soil_Type_2, Soil_Type_3, Soil_Type_4, Soil_Type_5, Soil_Type_6, Soil_Type_7, Soil_Type_8, Soil_Type_9, Soil_Type_10, Soil_Type_11, Soil_Type_12, Soil_Type_13, Soil_Type_14, Soil_Type_15, Soil_Type_16, Soil_Type_17, Soil_Type_18, Soil_Type_19, Soil_Type_20, Soil_Type_21, Soil_Type_22, Soil_Type_23, Soil_Type_24, Soil_Type_25, Soil_Type_26, Soil_Type_27, Soil_Type_28, Soil_Type_29, Soil_Type_30, Soil_T..."
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d399"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590148283964_-884334364",
+      "id": "20200522-115123_930369293",
+      "dateCreated": "2020-05-22 11:51:23.964",
+      "dateStarted": "2020-05-22 13:51:02.320",
+      "dateFinished": "2020-05-22 13:51:12.224",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Create basic decision tree",
+      "text": "import org.apache.spark.ml.classification.RandomForestClassifier\nimport scala.util.Random\n\nval classifier \u003d new RandomForestClassifier()\n .setSeed(Random.nextLong())\n .setLabelCol(\"Cover_Type\")\n .setFeaturesCol(\"featureVector\")\n .setPredictionCol(\"prediction\")\n \nval model \u003d classifier.fit(assembledTrainData)\n\nprintln(model.toDebugString)",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:51:12.236",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "RandomForestClassificationModel (uid\u003drfc_82e328b1e6ac) with 20 trees\n  Tree 0 (weight 1.0):\n    If (feature 0 \u003c\u003d 3049.0)\n     If (feature 0 \u003c\u003d 2556.0)\n      If (feature 17 \u003c\u003d 0.0)\n       If (feature 4 \u003c\u003d 29.0)\n        If (feature 10 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 10 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 4 \u003e 29.0)\n        If (feature 9 \u003c\u003d 666.0)\n         Predict: 3.0\n        Else (feature 9 \u003e 666.0)\n         Predict: 3.0\n      Else (feature 17 \u003e 0.0)\n       Predict: 3.0\n     Else (feature 0 \u003e 2556.0)\n      If (feature 12 \u003c\u003d 0.0)\n       If (feature 36 \u003c\u003d 0.0)\n        If (feature 35 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 35 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 36 \u003e 0.0)\n        If (feature 3 \u003c\u003d 150.0)\n         Predict: 2.0\n        Else (feature 3 \u003e 150.0)\n         Predict: 2.0\n      Else (feature 12 \u003e 0.0)\n       If (feature 15 \u003c\u003d 0.0)\n        If (feature 37 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 37 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 15 \u003e 0.0)\n        If (feature 5 \u003c\u003d 2399.0)\n         Predict: 3.0\n        Else (feature 5 \u003e 2399.0)\n         Predict: 2.0\n    Else (feature 0 \u003e 3049.0)\n     If (feature 52 \u003c\u003d 0.0)\n      If (feature 12 \u003c\u003d 0.0)\n       If (feature 45 \u003c\u003d 0.0)\n        If (feature 35 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 35 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 45 \u003e 0.0)\n        If (feature 3 \u003c\u003d 384.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 384.0)\n         Predict: 2.0\n      Else (feature 12 \u003e 0.0)\n       If (feature 8 \u003c\u003d 211.0)\n        If (feature 5 \u003c\u003d 870.0)\n         Predict: 2.0\n        Else (feature 5 \u003e 870.0)\n         Predict: 1.0\n       Else (feature 8 \u003e 211.0)\n        If (feature 37 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 37 \u003e 0.0)\n         Predict: 1.0\n     Else (feature 52 \u003e 0.0)\n      If (feature 6 \u003c\u003d 206.0)\n       If (feature 5 \u003c\u003d 2572.0)\n        If (feature 10 \u003c\u003d 0.0)\n         Predict: 7.0\n        Else (feature 10 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 5 \u003e 2572.0)\n        If (feature 1 \u003c\u003d 22.0)\n         Predict: 7.0\n        Else (feature 1 \u003e 22.0)\n         Predict: 1.0\n      Else (feature 6 \u003e 206.0)\n       If (feature 0 \u003c\u003d 3317.0)\n        If (feature 12 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 12 \u003e 0.0)\n         Predict: 7.0\n       Else (feature 0 \u003e 3317.0)\n        If (feature 0 \u003c\u003d 3373.0)\n         Predict: 7.0\n        Else (feature 0 \u003e 3373.0)\n         Predict: 7.0\n  Tree 1 (weight 1.0):\n    If (feature 11 \u003c\u003d 0.0)\n     If (feature 5 \u003c\u003d 1476.0)\n      If (feature 0 \u003c\u003d 2556.0)\n       If (feature 10 \u003c\u003d 0.0)\n        If (feature 0 \u003c\u003d 2454.0)\n         Predict: 3.0\n        Else (feature 0 \u003e 2454.0)\n         Predict: 3.0\n       Else (feature 10 \u003e 0.0)\n        If (feature 4 \u003c\u003d 4.0)\n         Predict: 2.0\n        Else (feature 4 \u003e 4.0)\n         Predict: 2.0\n      Else (feature 0 \u003e 2556.0)\n       If (feature 52 \u003c\u003d 0.0)\n        If (feature 35 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 35 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 52 \u003e 0.0)\n        If (feature 3 \u003c\u003d 297.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 297.0)\n         Predict: 7.0\n     Else (feature 5 \u003e 1476.0)\n      If (feature 9 \u003c\u003d 4497.0)\n       If (feature 35 \u003c\u003d 0.0)\n        If (feature 51 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 51 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 35 \u003e 0.0)\n        If (feature 7 \u003c\u003d 239.0)\n         Predict: 1.0\n        Else (feature 7 \u003e 239.0)\n         Predict: 1.0\n      Else (feature 9 \u003e 4497.0)\n       If (feature 0 \u003c\u003d 3049.0)\n        If (feature 25 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 25 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 0 \u003e 3049.0)\n        If (feature 3 \u003c\u003d 175.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 175.0)\n         Predict: 1.0\n    Else (feature 11 \u003e 0.0)\n     If (feature 52 \u003c\u003d 0.0)\n      If (feature 38 \u003c\u003d 0.0)\n       If (feature 53 \u003c\u003d 0.0)\n        If (feature 35 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 35 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 53 \u003e 0.0)\n        If (feature 2 \u003c\u003d 17.0)\n         Predict: 7.0\n        Else (feature 2 \u003e 17.0)\n         Predict: 1.0\n      Else (feature 38 \u003e 0.0)\n       Predict: 2.0\n     Else (feature 52 \u003e 0.0)\n      If (feature 4 \u003c\u003d -17.0)\n       If (feature 2 \u003c\u003d 12.0)\n        If (feature 8 \u003c\u003d 111.0)\n         Predict: 7.0\n        Else (feature 8 \u003e 111.0)\n         Predict: 1.0\n       Else (feature 2 \u003e 12.0)\n        If (feature 9 \u003c\u003d 2081.0)\n         Predict: 7.0\n        Else (feature 9 \u003e 2081.0)\n         Predict: 1.0\n      Else (feature 4 \u003e -17.0)\n       If (feature 1 \u003c\u003d 309.0)\n        If (feature 3 \u003c\u003d 256.0)\n         Predict: 7.0\n        Else (feature 3 \u003e 256.0)\n         Predict: 1.0\n       Else (feature 1 \u003e 309.0)\n        If (feature 3 \u003c\u003d 90.0)\n         Predict: 7.0\n        Else (feature 3 \u003e 90.0)\n         Predict: 1.0\n  Tree 2 (weight 1.0):\n    If (feature 35 \u003c\u003d 0.0)\n     If (feature 17 \u003c\u003d 0.0)\n      If (feature 25 \u003c\u003d 0.0)\n       If (feature 0 \u003c\u003d 3049.0)\n        If (feature 23 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 23 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 0 \u003e 3049.0)\n        If (feature 12 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 12 \u003e 0.0)\n         Predict: 1.0\n      Else (feature 25 \u003e 0.0)\n       Predict: 2.0\n     Else (feature 17 \u003e 0.0)\n      If (feature 5 \u003c\u003d 1376.0)\n       If (feature 1 \u003c\u003d 166.0)\n        If (feature 8 \u003c\u003d 134.0)\n         Predict: 3.0\n        Else (feature 8 \u003e 134.0)\n         Predict: 3.0\n       Else (feature 1 \u003e 166.0)\n        Predict: 3.0\n      Else (feature 5 \u003e 1376.0)\n       If (feature 7 \u003c\u003d 251.0)\n        Predict: 3.0\n       Else (feature 7 \u003e 251.0)\n        If (feature 8 \u003c\u003d 192.0)\n         Predict: 2.0\n        Else (feature 8 \u003e 192.0)\n         Predict: 2.0\n    Else (feature 35 \u003e 0.0)\n     If (feature 5 \u003c\u003d 870.0)\n      If (feature 1 \u003c\u003d 260.0)\n       If (feature 11 \u003c\u003d 0.0)\n        Predict: 1.0\n       Else (feature 11 \u003e 0.0)\n        Predict: 2.0\n      Else (feature 1 \u003e 260.0)\n       If (feature 6 \u003c\u003d 190.0)\n        If (feature 2 \u003c\u003d 18.0)\n         Predict: 1.0\n        Else (feature 2 \u003e 18.0)\n         Predict: 1.0\n       Else (feature 6 \u003e 190.0)\n        If (feature 0 \u003c\u003d 3123.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 3123.0)\n         Predict: 1.0\n     Else (feature 5 \u003e 870.0)\n      If (feature 0 \u003c\u003d 2834.0)\n       If (feature 1 \u003c\u003d 117.0)\n        If (feature 9 \u003c\u003d 324.0)\n         Predict: 2.0\n        Else (feature 9 \u003e 324.0)\n         Predict: 2.0\n       Else (feature 1 \u003e 117.0)\n        If (feature 9 \u003c\u003d 1413.0)\n         Predict: 1.0\n        Else (feature 9 \u003e 1413.0)\n         Predict: 1.0\n      Else (feature 0 \u003e 2834.0)\n       If (feature 7 \u003c\u003d 239.0)\n        If (feature 0 \u003c\u003d 3029.0)\n         Predict: 1.0\n        Else (feature 0 \u003e 3029.0)\n         Predict: 1.0\n       Else (feature 7 \u003e 239.0)\n        If (feature 3 \u003c\u003d 90.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 90.0)\n         Predict: 1.0\n  Tree 3 (weight 1.0):\n    If (feature 17 \u003c\u003d 0.0)\n     If (feature 35 \u003c\u003d 0.0)\n      If (feature 10 \u003c\u003d 0.0)\n       If (feature 0 \u003c\u003d 2556.0)\n        If (feature 0 \u003c\u003d 2454.0)\n         Predict: 3.0\n        Else (feature 0 \u003e 2454.0)\n         Predict: 2.0\n       Else (feature 0 \u003e 2556.0)\n        If (feature 0 \u003c\u003d 3096.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 3096.0)\n         Predict: 1.0\n      Else (feature 10 \u003e 0.0)\n       If (feature 36 \u003c\u003d 0.0)\n        If (feature 25 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 25 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 36 \u003e 0.0)\n        Predict: 1.0\n     Else (feature 35 \u003e 0.0)\n      If (feature 3 \u003c\u003d 127.0)\n       Predict: 1.0\n      Else (feature 3 \u003e 127.0)\n       Predict: 1.0\n    Else (feature 17 \u003e 0.0)\n     If (feature 5 \u003c\u003d 1265.0)\n      If (feature 0 \u003c\u003d 2677.0)\n       If (feature 12 \u003c\u003d 0.0)\n        If (feature 4 \u003c\u003d 6.0)\n         Predict: 4.0\n        Else (feature 4 \u003e 6.0)\n         Predict: 3.0\n       Else (feature 12 \u003e 0.0)\n        If (feature 2 \u003c\u003d 9.0)\n         Predict: 3.0\n        Else (feature 2 \u003e 9.0)\n         Predict: 3.0\n      Else (feature 0 \u003e 2677.0)\n       Predict: 5.0\n     Else (feature 5 \u003e 1265.0)\n      Predict: 3.0\n  Tree 4 (weight 1.0):\n    If (feature 0 \u003c\u003d 3049.0)\n     If (feature 19 \u003c\u003d 0.0)\n      If (feature 15 \u003c\u003d 0.0)\n       If (feature 13 \u003c\u003d 0.0)\n        If (feature 35 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 35 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 13 \u003e 0.0)\n        If (feature 16 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 16 \u003e 0.0)\n         Predict: 3.0\n      Else (feature 15 \u003e 0.0)\n       If (feature 9 \u003c\u003d 1413.0)\n        If (feature 13 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 13 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 9 \u003e 1413.0)\n        If (feature 2 \u003c\u003d 12.0)\n         Predict: 3.0\n        Else (feature 2 \u003e 12.0)\n         Predict: 3.0\n     Else (feature 19 \u003e 0.0)\n      If (feature 3 \u003c\u003d 0.0)\n       If (feature 0 \u003c\u003d 2454.0)\n        Predict: 3.0\n       Else (feature 0 \u003e 2454.0)\n        Predict: 6.0\n      Else (feature 3 \u003e 0.0)\n       If (feature 9 \u003c\u003d 1179.0)\n        If (feature 2 \u003c\u003d 14.0)\n         Predict: 3.0\n        Else (feature 2 \u003e 14.0)\n         Predict: 3.0\n       Else (feature 9 \u003e 1179.0)\n        If (feature 9 \u003c\u003d 1500.0)\n         Predict: 6.0\n        Else (feature 9 \u003e 1500.0)\n         Predict: 3.0\n    Else (feature 0 \u003e 3049.0)\n     If (feature 3 \u003c\u003d 210.0)\n      If (feature 36 \u003c\u003d 0.0)\n       If (feature 3 \u003c\u003d 85.0)\n        If (feature 35 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 35 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 3 \u003e 85.0)\n        If (feature 5 \u003c\u003d 870.0)\n         Predict: 1.0\n        Else (feature 5 \u003e 870.0)\n         Predict: 1.0\n      Else (feature 36 \u003e 0.0)\n       If (feature 11 \u003c\u003d 0.0)\n        If (feature 3 \u003c\u003d 67.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 67.0)\n         Predict: 1.0\n       Else (feature 11 \u003e 0.0)\n        Predict: 1.0\n     Else (feature 3 \u003e 210.0)\n      If (feature 0 \u003c\u003d 3317.0)\n       If (feature 0 \u003c\u003d 3165.0)\n        If (feature 45 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 45 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 0 \u003e 3165.0)\n        If (feature 4 \u003c\u003d -6.0)\n         Predict: 2.0\n        Else (feature 4 \u003e -6.0)\n         Predict: 1.0\n      Else (feature 0 \u003e 3317.0)\n       If (feature 9 \u003c\u003d 3262.0)\n        If (feature 10 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 10 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 9 \u003e 3262.0)\n        If (feature 7 \u003c\u003d 239.0)\n         Predict: 7.0\n        Else (feature 7 \u003e 239.0)\n         Predict: 1.0\n  Tree 5 (weight 1.0):\n    If (feature 10 \u003c\u003d 0.0)\n     If (feature 0 \u003c\u003d 2677.0)\n      If (feature 17 \u003c\u003d 0.0)\n       If (feature 9 \u003c\u003d 1261.0)\n        If (feature 23 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 23 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 9 \u003e 1261.0)\n        If (feature 1 \u003c\u003d 81.0)\n         Predict: 2.0\n        Else (feature 1 \u003e 81.0)\n         Predict: 2.0\n      Else (feature 17 \u003e 0.0)\n       If (feature 3 \u003c\u003d 0.0)\n        If (feature 0 \u003c\u003d 2309.0)\n         Predict: 4.0\n        Else (feature 0 \u003e 2309.0)\n         Predict: 6.0\n       Else (feature 3 \u003e 0.0)\n        Predict: 3.0\n     Else (feature 0 \u003e 2677.0)\n      If (feature 52 \u003c\u003d 0.0)\n       If (feature 24 \u003c\u003d 0.0)\n        If (feature 12 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 12 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 24 \u003e 0.0)\n        Predict: 2.0\n      Else (feature 52 \u003e 0.0)\n       If (feature 6 \u003c\u003d 186.0)\n        If (feature 9 \u003c\u003d 931.0)\n         Predict: 7.0\n        Else (feature 9 \u003e 931.0)\n         Predict: 1.0\n       Else (feature 6 \u003e 186.0)\n        If (feature 0 \u003c\u003d 3230.0)\n         Predict: 1.0\n        Else (feature 0 \u003e 3230.0)\n         Predict: 7.0\n    Else (feature 10 \u003e 0.0)\n     If (feature 42 \u003c\u003d 0.0)\n      If (feature 50 \u003c\u003d 0.0)\n       If (feature 35 \u003c\u003d 0.0)\n        If (feature 0 \u003c\u003d 3049.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 3049.0)\n         Predict: 1.0\n       Else (feature 35 \u003e 0.0)\n        If (feature 1 \u003c\u003d 217.0)\n         Predict: 1.0\n        Else (feature 1 \u003e 217.0)\n         Predict: 1.0\n      Else (feature 50 \u003e 0.0)\n       Predict: 7.0\n     Else (feature 42 \u003e 0.0)\n      Predict: 2.0\n  Tree 6 (weight 1.0):\n    If (feature 25 \u003c\u003d 0.0)\n     If (feature 13 \u003c\u003d 0.0)\n      If (feature 0 \u003c\u003d 3049.0)\n       If (feature 10 \u003c\u003d 0.0)\n        If (feature 4 \u003c\u003d 26.0)\n         Predict: 2.0\n        Else (feature 4 \u003e 26.0)\n         Predict: 2.0\n       Else (feature 10 \u003e 0.0)\n        If (feature 0 \u003c\u003d 2955.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2955.0)\n         Predict: 2.0\n      Else (feature 0 \u003e 3049.0)\n       If (feature 7 \u003c\u003d 239.0)\n        If (feature 7 \u003c\u003d 224.0)\n         Predict: 1.0\n        Else (feature 7 \u003e 224.0)\n         Predict: 1.0\n       Else (feature 7 \u003e 239.0)\n        If (feature 51 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 51 \u003e 0.0)\n         Predict: 1.0\n     Else (feature 13 \u003e 0.0)\n      If (feature 7 \u003c\u003d 214.0)\n       If (feature 6 \u003c\u003d 244.0)\n        If (feature 3 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 3 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 6 \u003e 244.0)\n        If (feature 3 \u003c\u003d 90.0)\n         Predict: 3.0\n        Else (feature 3 \u003e 90.0)\n         Predict: 3.0\n      Else (feature 7 \u003e 214.0)\n       If (feature 30 \u003c\u003d 0.0)\n        If (feature 4 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 4 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 30 \u003e 0.0)\n        If (feature 2 \u003c\u003d 21.0)\n         Predict: 4.0\n        Else (feature 2 \u003e 21.0)\n         Predict: 3.0\n    Else (feature 25 \u003e 0.0)\n     If (feature 4 \u003c\u003d 77.0)\n      If (feature 4 \u003c\u003d 11.0)\n       Predict: 2.0\n      Else (feature 4 \u003e 11.0)\n       If (feature 7 \u003c\u003d 245.0)\n        If (feature 7 \u003c\u003d 205.0)\n         Predict: 2.0\n        Else (feature 7 \u003e 205.0)\n         Predict: 2.0\n       Else (feature 7 \u003e 245.0)\n        If (feature 8 \u003c\u003d 181.0)\n         Predict: 2.0\n        Else (feature 8 \u003e 181.0)\n         Predict: 2.0\n     Else (feature 4 \u003e 77.0)\n      If (feature 9 \u003c\u003d 3801.0)\n       If (feature 4 \u003c\u003d 96.0)\n        Predict: 2.0\n       Else (feature 4 \u003e 96.0)\n        Predict: 2.0\n      Else (feature 9 \u003e 3801.0)\n       If (feature 2 \u003c\u003d 14.0)\n        If (feature 5 \u003c\u003d 3585.0)\n         Predict: 1.0\n        Else (feature 5 \u003e 3585.0)\n         Predict: 2.0\n       Else (feature 2 \u003e 14.0)\n        If (feature 8 \u003c\u003d 83.0)\n         Predict: 2.0\n        Else (feature 8 \u003e 83.0)\n         Predict: 2.0\n  Tree 7 (weight 1.0):\n    If (feature 35 \u003c\u003d 0.0)\n     If (feature 23 \u003c\u003d 0.0)\n      If (feature 0 \u003c\u003d 3049.0)\n       If (feature 10 \u003c\u003d 0.0)\n        If (feature 0 \u003c\u003d 2615.0)\n         Predict: 3.0\n        Else (feature 0 \u003e 2615.0)\n         Predict: 2.0\n       Else (feature 10 \u003e 0.0)\n        If (feature 4 \u003c\u003d 6.0)\n         Predict: 2.0\n        Else (feature 4 \u003e 6.0)\n         Predict: 2.0\n      Else (feature 0 \u003e 3049.0)\n       If (feature 44 \u003c\u003d 0.0)\n        If (feature 5 \u003c\u003d 5305.0)\n         Predict: 1.0\n        Else (feature 5 \u003e 5305.0)\n         Predict: 2.0\n       Else (feature 44 \u003e 0.0)\n        If (feature 8 \u003c\u003d 181.0)\n         Predict: 1.0\n        Else (feature 8 \u003e 181.0)\n         Predict: 1.0\n     Else (feature 23 \u003e 0.0)\n      If (feature 12 \u003c\u003d 0.0)\n       If (feature 2 \u003c\u003d 25.0)\n        If (feature 6 \u003c\u003d 227.0)\n         Predict: 3.0\n        Else (feature 6 \u003e 227.0)\n         Predict: 6.0\n       Else (feature 2 \u003e 25.0)\n        If (feature 5 \u003c\u003d 1063.0)\n         Predict: 3.0\n        Else (feature 5 \u003e 1063.0)\n         Predict: 3.0\n      Else (feature 12 \u003e 0.0)\n       If (feature 0 \u003c\u003d 2615.0)\n        If (feature 4 \u003c\u003d 108.0)\n         Predict: 6.0\n        Else (feature 4 \u003e 108.0)\n         Predict: 2.0\n       Else (feature 0 \u003e 2615.0)\n        If (feature 9 \u003c\u003d 1875.0)\n         Predict: 2.0\n        Else (feature 9 \u003e 1875.0)\n         Predict: 2.0\n    Else (feature 35 \u003e 0.0)\n     If (feature 0 \u003c\u003d 3207.0)\n      If (feature 5 \u003c\u003d 5305.0)\n       If (feature 5 \u003c\u003d 1063.0)\n        If (feature 1 \u003c\u003d 279.0)\n         Predict: 1.0\n        Else (feature 1 \u003e 279.0)\n         Predict: 1.0\n       Else (feature 5 \u003e 1063.0)\n        If (feature 5 \u003c\u003d 1811.0)\n         Predict: 1.0\n        Else (feature 5 \u003e 1811.0)\n         Predict: 1.0\n      Else (feature 5 \u003e 5305.0)\n       If (feature 7 \u003c\u003d 237.0)\n        If (feature 2 \u003c\u003d 8.0)\n         Predict: 1.0\n        Else (feature 2 \u003e 8.0)\n         Predict: 1.0\n       Else (feature 7 \u003e 237.0)\n        If (feature 3 \u003c\u003d 67.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 67.0)\n         Predict: 2.0\n     Else (feature 0 \u003e 3207.0)\n      If (feature 0 \u003c\u003d 3230.0)\n       If (feature 3 \u003c\u003d 190.0)\n        Predict: 1.0\n       Else (feature 3 \u003e 190.0)\n        If (feature 2 \u003c\u003d 3.0)\n         Predict: 1.0\n        Else (feature 2 \u003e 3.0)\n         Predict: 1.0\n      Else (feature 0 \u003e 3230.0)\n       If (feature 6 \u003c\u003d 229.0)\n        If (feature 7 \u003c\u003d 228.0)\n         Predict: 1.0\n        Else (feature 7 \u003e 228.0)\n         Predict: 1.0\n       Else (feature 6 \u003e 229.0)\n        If (feature 3 \u003c\u003d 655.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 655.0)\n         Predict: 2.0\n  Tree 8 (weight 1.0):\n    If (feature 23 \u003c\u003d 0.0)\n     If (feature 13 \u003c\u003d 0.0)\n      If (feature 35 \u003c\u003d 0.0)\n       If (feature 2 \u003c\u003d 22.0)\n        If (feature 24 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 24 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 2 \u003e 22.0)\n        If (feature 0 \u003c\u003d 2991.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2991.0)\n         Predict: 1.0\n      Else (feature 35 \u003e 0.0)\n       If (feature 3 \u003c\u003d 120.0)\n        If (feature 12 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 12 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 3 \u003e 120.0)\n        Predict: 1.0\n     Else (feature 13 \u003e 0.0)\n      If (feature 18 \u003c\u003d 0.0)\n       If (feature 3 \u003c\u003d 0.0)\n        If (feature 1 \u003c\u003d 181.0)\n         Predict: 4.0\n        Else (feature 1 \u003e 181.0)\n         Predict: 4.0\n       Else (feature 3 \u003e 0.0)\n        If (feature 5 \u003c\u003d 661.0)\n         Predict: 3.0\n        Else (feature 5 \u003e 661.0)\n         Predict: 3.0\n      Else (feature 18 \u003e 0.0)\n       If (feature 5 \u003c\u003d 964.0)\n        If (feature 1 \u003c\u003d 22.0)\n         Predict: 6.0\n        Else (feature 1 \u003e 22.0)\n         Predict: 3.0\n       Else (feature 5 \u003e 964.0)\n        If (feature 8 \u003c\u003d 172.0)\n         Predict: 6.0\n        Else (feature 8 \u003e 172.0)\n         Predict: 6.0\n    Else (feature 23 \u003e 0.0)\n     Predict: 3.0\n  Tree 9 (weight 1.0):\n    If (feature 0 \u003c\u003d 3049.0)\n     If (feature 17 \u003c\u003d 0.0)\n      If (feature 19 \u003c\u003d 0.0)\n       If (feature 13 \u003c\u003d 0.0)\n        If (feature 36 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 36 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 13 \u003e 0.0)\n        If (feature 0 \u003c\u003d 2454.0)\n         Predict: 3.0\n        Else (feature 0 \u003e 2454.0)\n         Predict: 2.0\n      Else (feature 19 \u003e 0.0)\n       If (feature 4 \u003c\u003d 69.0)\n        If (feature 3 \u003c\u003d 0.0)\n         Predict: 4.0\n        Else (feature 3 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 4 \u003e 69.0)\n        Predict: 3.0\n     Else (feature 17 \u003e 0.0)\n      If (feature 5 \u003c\u003d 1376.0)\n       If (feature 0 \u003c\u003d 2677.0)\n        If (feature 2 \u003c\u003d 9.0)\n         Predict: 3.0\n        Else (feature 2 \u003e 9.0)\n         Predict: 3.0\n       Else (feature 0 \u003e 2677.0)\n        If (feature 1 \u003c\u003d 166.0)\n         Predict: 2.0\n        Else (feature 1 \u003e 166.0)\n         Predict: 2.0\n      Else (feature 5 \u003e 1376.0)\n       If (feature 9 \u003c\u003d 577.0)\n        Predict: 3.0\n       Else (feature 9 \u003e 577.0)\n        If (feature 13 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 13 \u003e 0.0)\n         Predict: 3.0\n    Else (feature 0 \u003e 3049.0)\n     If (feature 52 \u003c\u003d 0.0)\n      If (feature 37 \u003c\u003d 0.0)\n       If (feature 12 \u003c\u003d 0.0)\n        If (feature 3 \u003c\u003d 210.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 210.0)\n         Predict: 1.0\n       Else (feature 12 \u003e 0.0)\n        If (feature 9 \u003c\u003d 3262.0)\n         Predict: 1.0\n        Else (feature 9 \u003e 3262.0)\n         Predict: 7.0\n      Else (feature 37 \u003e 0.0)\n       If (feature 6 \u003c\u003d 181.0)\n        If (feature 12 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 12 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 6 \u003e 181.0)\n        If (feature 3 \u003c\u003d 768.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 768.0)\n         Predict: 2.0\n     Else (feature 52 \u003e 0.0)\n      If (feature 10 \u003c\u003d 0.0)\n       If (feature 0 \u003c\u003d 3317.0)\n        If (feature 4 \u003c\u003d 9.0)\n         Predict: 7.0\n        Else (feature 4 \u003e 9.0)\n         Predict: 1.0\n       Else (feature 0 \u003e 3317.0)\n        Predict: 7.0\n      Else (feature 10 \u003e 0.0)\n       If (feature 6 \u003c\u003d 235.0)\n        If (feature 6 \u003c\u003d 206.0)\n         Predict: 1.0\n        Else (feature 6 \u003e 206.0)\n         Predict: 1.0\n       Else (feature 6 \u003e 235.0)\n        If (feature 1 \u003c\u003d 107.0)\n         Predict: 1.0\n        Else (feature 1 \u003e 107.0)\n         Predict: 1.0\n  Tree 10 (weight 1.0):\n    If (feature 0 \u003c\u003d 3049.0)\n     If (feature 13 \u003c\u003d 0.0)\n      If (feature 35 \u003c\u003d 0.0)\n       If (feature 4 \u003c\u003d 11.0)\n        If (feature 0 \u003c\u003d 2913.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2913.0)\n         Predict: 2.0\n       Else (feature 4 \u003e 11.0)\n        If (feature 17 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 17 \u003e 0.0)\n         Predict: 3.0\n      Else (feature 35 \u003e 0.0)\n       If (feature 6 \u003c\u003d 221.0)\n        If (feature 3 \u003c\u003d 120.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 120.0)\n         Predict: 1.0\n       Else (feature 6 \u003e 221.0)\n        If (feature 9 \u003c\u003d 2960.0)\n         Predict: 1.0\n        Else (feature 9 \u003e 2960.0)\n         Predict: 1.0\n     Else (feature 13 \u003e 0.0)\n      If (feature 1 \u003c\u003d 240.0)\n       If (feature 7 \u003c\u003d 201.0)\n        If (feature 6 \u003c\u003d 241.0)\n         Predict: 3.0\n        Else (feature 6 \u003e 241.0)\n         Predict: 3.0\n       Else (feature 7 \u003e 201.0)\n        If (feature 4 \u003c\u003d 0.0)\n         Predict: 4.0\n        Else (feature 4 \u003e 0.0)\n         Predict: 3.0\n      Else (feature 1 \u003e 240.0)\n       If (feature 0 \u003c\u003d 2454.0)\n        If (feature 9 \u003c\u003d 666.0)\n         Predict: 3.0\n        Else (feature 9 \u003e 666.0)\n         Predict: 3.0\n       Else (feature 0 \u003e 2454.0)\n        If (feature 1 \u003c\u003d 279.0)\n         Predict: 2.0\n        Else (feature 1 \u003e 279.0)\n         Predict: 2.0\n    Else (feature 0 \u003e 3049.0)\n     If (feature 45 \u003c\u003d 0.0)\n      If (feature 51 \u003c\u003d 0.0)\n       If (feature 0 \u003c\u003d 3317.0)\n        If (feature 8 \u003c\u003d 164.0)\n         Predict: 1.0\n        Else (feature 8 \u003e 164.0)\n         Predict: 1.0\n       Else (feature 0 \u003e 3317.0)\n        If (feature 9 \u003c\u003d 3262.0)\n         Predict: 1.0\n        Else (feature 9 \u003e 3262.0)\n         Predict: 7.0\n      Else (feature 51 \u003e 0.0)\n       If (feature 12 \u003c\u003d 0.0)\n        If (feature 10 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 10 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 12 \u003e 0.0)\n        If (feature 1 \u003c\u003d 279.0)\n         Predict: 7.0\n        Else (feature 1 \u003e 279.0)\n         Predict: 7.0\n     Else (feature 45 \u003e 0.0)\n      If (feature 11 \u003c\u003d 0.0)\n       If (feature 9 \u003c\u003d 845.0)\n        If (feature 7 \u003c\u003d 249.0)\n         Predict: 1.0\n        Else (feature 7 \u003e 249.0)\n         Predict: 2.0\n       Else (feature 9 \u003e 845.0)\n        If (feature 5 \u003c\u003d 870.0)\n         Predict: 2.0\n        Else (feature 5 \u003e 870.0)\n         Predict: 1.0\n      Else (feature 11 \u003e 0.0)\n       If (feature 7 \u003c\u003d 231.0)\n        If (feature 5 \u003c\u003d 964.0)\n         Predict: 2.0\n        Else (feature 5 \u003e 964.0)\n         Predict: 1.0\n       Else (feature 7 \u003e 231.0)\n        If (feature 5 \u003c\u003d 1265.0)\n         Predict: 2.0\n        Else (feature 5 \u003e 1265.0)\n         Predict: 1.0\n  Tree 11 (weight 1.0):\n    If (feature 17 \u003c\u003d 0.0)\n     If (feature 25 \u003c\u003d 0.0)\n      If (feature 0 \u003c\u003d 3049.0)\n       If (feature 23 \u003c\u003d 0.0)\n        If (feature 16 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 16 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 23 \u003e 0.0)\n        If (feature 8 \u003c\u003d 151.0)\n         Predict: 2.0\n        Else (feature 8 \u003e 151.0)\n         Predict: 3.0\n      Else (feature 0 \u003e 3049.0)\n       If (feature 1 \u003c\u003d 81.0)\n        If (feature 35 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 35 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 1 \u003e 81.0)\n        If (feature 51 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 51 \u003e 0.0)\n         Predict: 1.0\n     Else (feature 25 \u003e 0.0)\n      If (feature 0 \u003c\u003d 3010.0)\n       If (feature 9 \u003c\u003d 5444.0)\n        If (feature 0 \u003c\u003d 2677.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2677.0)\n         Predict: 2.0\n       Else (feature 9 \u003e 5444.0)\n        If (feature 8 \u003c\u003d 140.0)\n         Predict: 2.0\n        Else (feature 8 \u003e 140.0)\n         Predict: 2.0\n      Else (feature 0 \u003e 3010.0)\n       If (feature 4 \u003c\u003d 56.0)\n        If (feature 9 \u003c\u003d 5444.0)\n         Predict: 1.0\n        Else (feature 9 \u003e 5444.0)\n         Predict: 2.0\n       Else (feature 4 \u003e 56.0)\n        Predict: 2.0\n    Else (feature 17 \u003e 0.0)\n     If (feature 4 \u003c\u003d 124.0)\n      If (feature 9 \u003c\u003d 1261.0)\n       If (feature 13 \u003c\u003d 0.0)\n        If (feature 1 \u003c\u003d 98.0)\n         Predict: 3.0\n        Else (feature 1 \u003e 98.0)\n         Predict: 3.0\n       Else (feature 13 \u003e 0.0)\n        If (feature 5 \u003c\u003d 661.0)\n         Predict: 3.0\n        Else (feature 5 \u003e 661.0)\n         Predict: 3.0\n      Else (feature 9 \u003e 1261.0)\n       If (feature 12 \u003c\u003d 0.0)\n        If (feature 6 \u003c\u003d 204.0)\n         Predict: 3.0\n        Else (feature 6 \u003e 204.0)\n         Predict: 3.0\n       Else (feature 12 \u003e 0.0)\n        If (feature 8 \u003c\u003d 154.0)\n         Predict: 3.0\n        Else (feature 8 \u003e 154.0)\n         Predict: 2.0\n     Else (feature 4 \u003e 124.0)\n      If (feature 6 \u003c\u003d 241.0)\n       If (feature 9 \u003c\u003d 1179.0)\n        If (feature 5 \u003c\u003d 2240.0)\n         Predict: 3.0\n        Else (feature 5 \u003e 2240.0)\n         Predict: 2.0\n       Else (feature 9 \u003e 1179.0)\n        If (feature 5 \u003c\u003d 1165.0)\n         Predict: 5.0\n        Else (feature 5 \u003e 1165.0)\n         Predict: 2.0\n      Else (feature 6 \u003e 241.0)\n       Predict: 3.0\n  Tree 12 (weight 1.0):\n    If (feature 17 \u003c\u003d 0.0)\n     If (feature 0 \u003c\u003d 3049.0)\n      If (feature 0 \u003c\u003d 2454.0)\n       If (feature 9 \u003c\u003d 666.0)\n        If (feature 0 \u003c\u003d 2309.0)\n         Predict: 3.0\n        Else (feature 0 \u003e 2309.0)\n         Predict: 3.0\n       Else (feature 9 \u003e 666.0)\n        If (feature 1 \u003c\u003d 50.0)\n         Predict: 6.0\n        Else (feature 1 \u003e 50.0)\n         Predict: 3.0\n      Else (feature 0 \u003e 2454.0)\n       If (feature 10 \u003c\u003d 0.0)\n        If (feature 35 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 35 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 10 \u003e 0.0)\n        If (feature 36 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 36 \u003e 0.0)\n         Predict: 2.0\n     Else (feature 0 \u003e 3049.0)\n      If (feature 51 \u003c\u003d 0.0)\n       If (feature 53 \u003c\u003d 0.0)\n        If (feature 45 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 45 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 53 \u003e 0.0)\n        If (feature 6 \u003c\u003d 222.0)\n         Predict: 7.0\n        Else (feature 6 \u003e 222.0)\n         Predict: 1.0\n      Else (feature 51 \u003e 0.0)\n       If (feature 1 \u003c\u003d 44.0)\n        If (feature 3 \u003c\u003d 768.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 768.0)\n         Predict: 7.0\n       Else (feature 1 \u003e 44.0)\n        If (feature 11 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 11 \u003e 0.0)\n         Predict: 1.0\n    Else (feature 17 \u003e 0.0)\n     If (feature 13 \u003c\u003d 0.0)\n      Predict: 3.0\n     Else (feature 13 \u003e 0.0)\n      If (feature 3 \u003c\u003d 0.0)\n       Predict: 4.0\n      Else (feature 3 \u003e 0.0)\n       If (feature 2 \u003c\u003d 27.0)\n        If (feature 1 \u003c\u003d 320.0)\n         Predict: 3.0\n        Else (feature 1 \u003e 320.0)\n         Predict: 3.0\n       Else (feature 2 \u003e 27.0)\n        If (feature 5 \u003c\u003d 661.0)\n         Predict: 3.0\n        Else (feature 5 \u003e 661.0)\n         Predict: 3.0\n  Tree 13 (weight 1.0):\n    If (feature 10 \u003c\u003d 0.0)\n     If (feature 13 \u003c\u003d 0.0)\n      If (feature 23 \u003c\u003d 0.0)\n       If (feature 48 \u003c\u003d 0.0)\n        If (feature 12 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 12 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 48 \u003e 0.0)\n        If (feature 11 \u003c\u003d 0.0)\n         Predict: 7.0\n        Else (feature 11 \u003e 0.0)\n         Predict: 1.0\n      Else (feature 23 \u003e 0.0)\n       If (feature 1 \u003c\u003d 295.0)\n        If (feature 3 \u003c\u003d 277.0)\n         Predict: 2.0\n        Else (feature 3 \u003e 277.0)\n         Predict: 2.0\n       Else (feature 1 \u003e 295.0)\n        If (feature 9 \u003c\u003d 2081.0)\n         Predict: 2.0\n        Else (feature 9 \u003e 2081.0)\n         Predict: 6.0\n     Else (feature 13 \u003e 0.0)\n      If (feature 0 \u003c\u003d 2454.0)\n       If (feature 23 \u003c\u003d 0.0)\n        If (feature 3 \u003c\u003d 0.0)\n         Predict: 4.0\n        Else (feature 3 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 23 \u003e 0.0)\n        If (feature 0 \u003c\u003d 2309.0)\n         Predict: 3.0\n        Else (feature 0 \u003e 2309.0)\n         Predict: 3.0\n      Else (feature 0 \u003e 2454.0)\n       If (feature 8 \u003c\u003d 181.0)\n        If (feature 18 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 18 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 8 \u003e 181.0)\n        If (feature 8 \u003c\u003d 211.0)\n         Predict: 2.0\n        Else (feature 8 \u003e 211.0)\n         Predict: 2.0\n    Else (feature 10 \u003e 0.0)\n     If (feature 35 \u003c\u003d 0.0)\n      If (feature 36 \u003c\u003d 0.0)\n       If (feature 9 \u003c\u003d 4497.0)\n        If (feature 52 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 52 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 9 \u003e 4497.0)\n        If (feature 0 \u003c\u003d 3049.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 3049.0)\n         Predict: 1.0\n      Else (feature 36 \u003e 0.0)\n       If (feature 1 \u003c\u003d 117.0)\n        If (feature 6 \u003c\u003d 237.0)\n         Predict: 1.0\n        Else (feature 6 \u003e 237.0)\n         Predict: 2.0\n       Else (feature 1 \u003e 117.0)\n        If (feature 0 \u003c\u003d 2936.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2936.0)\n         Predict: 1.0\n     Else (feature 35 \u003e 0.0)\n      If (feature 0 \u003c\u003d 3207.0)\n       If (feature 5 \u003c\u003d 5305.0)\n        If (feature 2 \u003c\u003d 5.0)\n         Predict: 1.0\n        Else (feature 2 \u003e 5.0)\n         Predict: 1.0\n       Else (feature 5 \u003e 5305.0)\n        If (feature 4 \u003c\u003d 6.0)\n         Predict: 1.0\n        Else (feature 4 \u003e 6.0)\n         Predict: 2.0\n      Else (feature 0 \u003e 3207.0)\n       If (feature 1 \u003c\u003d 73.0)\n        If (feature 8 \u003c\u003d 106.0)\n         Predict: 1.0\n        Else (feature 8 \u003e 106.0)\n         Predict: 1.0\n       Else (feature 1 \u003e 73.0)\n        Predict: 1.0\n  Tree 14 (weight 1.0):\n    If (feature 52 \u003c\u003d 0.0)\n     If (feature 0 \u003c\u003d 3049.0)\n      If (feature 17 \u003c\u003d 0.0)\n       If (feature 5 \u003c\u003d 1476.0)\n        If (feature 13 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 13 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 5 \u003e 1476.0)\n        If (feature 25 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 25 \u003e 0.0)\n         Predict: 2.0\n      Else (feature 17 \u003e 0.0)\n       If (feature 12 \u003c\u003d 0.0)\n        If (feature 0 \u003c\u003d 2454.0)\n         Predict: 3.0\n        Else (feature 0 \u003e 2454.0)\n         Predict: 2.0\n       Else (feature 12 \u003e 0.0)\n        If (feature 6 \u003c\u003d 227.0)\n         Predict: 3.0\n        Else (feature 6 \u003e 227.0)\n         Predict: 3.0\n     Else (feature 0 \u003e 3049.0)\n      If (feature 1 \u003c\u003d 81.0)\n       If (feature 35 \u003c\u003d 0.0)\n        If (feature 0 \u003c\u003d 3317.0)\n         Predict: 1.0\n        Else (feature 0 \u003e 3317.0)\n         Predict: 1.0\n       Else (feature 35 \u003e 0.0)\n        Predict: 1.0\n      Else (feature 1 \u003e 81.0)\n       If (feature 7 \u003c\u003d 239.0)\n        If (feature 0 \u003c\u003d 3317.0)\n         Predict: 1.0\n        Else (feature 0 \u003e 3317.0)\n         Predict: 1.0\n       Else (feature 7 \u003e 239.0)\n        If (feature 3 \u003c\u003d 313.0)\n         Predict: 1.0\n        Else (feature 3 \u003e 313.0)\n         Predict: 2.0\n    Else (feature 52 \u003e 0.0)\n     If (feature 9 \u003c\u003d 1020.0)\n      If (feature 12 \u003c\u003d 0.0)\n       Predict: 1.0\n      Else (feature 12 \u003e 0.0)\n       If (feature 3 \u003c\u003d 335.0)\n        If (feature 0 \u003c\u003d 3165.0)\n         Predict: 1.0\n        Else (feature 0 \u003e 3165.0)\n         Predict: 7.0\n       Else (feature 3 \u003e 335.0)\n        If (feature 4 \u003c\u003d 108.0)\n         Predict: 7.0\n        Else (feature 4 \u003e 108.0)\n         Predict: 1.0\n     Else (feature 9 \u003e 1020.0)\n      If (feature 5 \u003c\u003d 1063.0)\n       Predict: 7.0\n      Else (feature 5 \u003e 1063.0)\n       If (feature 3 \u003c\u003d 577.0)\n        If (feature 2 \u003c\u003d 27.0)\n         Predict: 1.0\n        Else (feature 2 \u003e 27.0)\n         Predict: 1.0\n       Else (feature 3 \u003e 577.0)\n        If (feature 1 \u003c\u003d 58.0)\n         Predict: 7.0\n        Else (feature 1 \u003e 58.0)\n         Predict: 1.0\n  Tree 15 (weight 1.0):\n    If (feature 7 \u003c\u003d 197.0)\n     If (feature 13 \u003c\u003d 0.0)\n      If (feature 26 \u003c\u003d 0.0)\n       If (feature 5 \u003c\u003d 1811.0)\n        If (feature 35 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 35 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 5 \u003e 1811.0)\n        If (feature 0 \u003c\u003d 2972.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2972.0)\n         Predict: 1.0\n      Else (feature 26 \u003e 0.0)\n       If (feature 9 \u003c\u003d 931.0)\n        If (feature 2 \u003c\u003d 21.0)\n         Predict: 5.0\n        Else (feature 2 \u003e 21.0)\n         Predict: 2.0\n       Else (feature 9 \u003e 931.0)\n        If (feature 12 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 12 \u003e 0.0)\n         Predict: 2.0\n     Else (feature 13 \u003e 0.0)\n      If (feature 27 \u003c\u003d 0.0)\n       If (feature 4 \u003c\u003d 86.0)\n        If (feature 8 \u003c\u003d 66.0)\n         Predict: 3.0\n        Else (feature 8 \u003e 66.0)\n         Predict: 3.0\n       Else (feature 4 \u003e 86.0)\n        If (feature 5 \u003c\u003d 964.0)\n         Predict: 3.0\n        Else (feature 5 \u003e 964.0)\n         Predict: 3.0\n      Else (feature 27 \u003e 0.0)\n       If (feature 4 \u003c\u003d 2.0)\n        If (feature 8 \u003c\u003d 66.0)\n         Predict: 4.0\n        Else (feature 8 \u003e 66.0)\n         Predict: 4.0\n       Else (feature 4 \u003e 2.0)\n        Predict: 6.0\n    Else (feature 7 \u003e 197.0)\n     If (feature 11 \u003c\u003d 0.0)\n      If (feature 0 \u003c\u003d 3049.0)\n       If (feature 9 \u003c\u003d 1332.0)\n        If (feature 25 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 25 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 9 \u003e 1332.0)\n        If (feature 30 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 30 \u003e 0.0)\n         Predict: 2.0\n      Else (feature 0 \u003e 3049.0)\n       If (feature 35 \u003c\u003d 0.0)\n        If (feature 51 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 51 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 35 \u003e 0.0)\n        If (feature 10 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 10 \u003e 0.0)\n         Predict: 1.0\n     Else (feature 11 \u003e 0.0)\n      If (feature 53 \u003c\u003d 0.0)\n       If (feature 37 \u003c\u003d 0.0)\n        If (feature 9 \u003c\u003d 2522.0)\n         Predict: 1.0\n        Else (feature 9 \u003e 2522.0)\n         Predict: 1.0\n       Else (feature 37 \u003e 0.0)\n        If (feature 9 \u003c\u003d 324.0)\n         Predict: 1.0\n        Else (feature 9 \u003e 324.0)\n         Predict: 2.0\n      Else (feature 53 \u003e 0.0)\n       If (feature 8 \u003c\u003d 192.0)\n        If (feature 6 \u003c\u003d 206.0)\n         Predict: 7.0\n        Else (feature 6 \u003e 206.0)\n         Predict: 7.0\n       Else (feature 8 \u003e 192.0)\n        If (feature 8 \u003c\u003d 211.0)\n         Predict: 1.0\n        Else (feature 8 \u003e 211.0)\n         Predict: 1.0\n  Tree 16 (weight 1.0):\n    If (feature 5 \u003c\u003d 1476.0)\n     If (feature 7 \u003c\u003d 189.0)\n      If (feature 0 \u003c\u003d 2454.0)\n       If (feature 4 \u003c\u003d 86.0)\n        If (feature 18 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 18 \u003e 0.0)\n         Predict: 6.0\n       Else (feature 4 \u003e 86.0)\n        If (feature 5 \u003c\u003d 964.0)\n         Predict: 3.0\n        Else (feature 5 \u003e 964.0)\n         Predict: 3.0\n      Else (feature 0 \u003e 2454.0)\n       If (feature 9 \u003c\u003d 1261.0)\n        If (feature 0 \u003c\u003d 3010.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 3010.0)\n         Predict: 1.0\n       Else (feature 9 \u003e 1261.0)\n        If (feature 0 \u003c\u003d 2913.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2913.0)\n         Predict: 1.0\n     Else (feature 7 \u003e 189.0)\n      If (feature 23 \u003c\u003d 0.0)\n       If (feature 0 \u003c\u003d 2556.0)\n        If (feature 42 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 42 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 0 \u003e 2556.0)\n        If (feature 0 \u003c\u003d 2991.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2991.0)\n         Predict: 1.0\n      Else (feature 23 \u003e 0.0)\n       If (feature 0 \u003c\u003d 2454.0)\n        If (feature 8 \u003c\u003d 211.0)\n         Predict: 3.0\n        Else (feature 8 \u003e 211.0)\n         Predict: 3.0\n       Else (feature 0 \u003e 2454.0)\n        Predict: 2.0\n    Else (feature 5 \u003e 1476.0)\n     If (feature 25 \u003c\u003d 0.0)\n      If (feature 42 \u003c\u003d 0.0)\n       If (feature 10 \u003c\u003d 0.0)\n        If (feature 52 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 52 \u003e 0.0)\n         Predict: 7.0\n       Else (feature 10 \u003e 0.0)\n        If (feature 51 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 51 \u003e 0.0)\n         Predict: 1.0\n      Else (feature 42 \u003e 0.0)\n       If (feature 7 \u003c\u003d 241.0)\n        If (feature 7 \u003c\u003d 227.0)\n         Predict: 2.0\n        Else (feature 7 \u003e 227.0)\n         Predict: 2.0\n       Else (feature 7 \u003e 241.0)\n        If (feature 5 \u003c\u003d 4158.0)\n         Predict: 1.0\n        Else (feature 5 \u003e 4158.0)\n         Predict: 2.0\n     Else (feature 25 \u003e 0.0)\n      If (feature 0 \u003c\u003d 3010.0)\n       If (feature 9 \u003c\u003d 5444.0)\n        If (feature 5 \u003c\u003d 1950.0)\n         Predict: 2.0\n        Else (feature 5 \u003e 1950.0)\n         Predict: 2.0\n       Else (feature 9 \u003e 5444.0)\n        If (feature 3 \u003c\u003d 297.0)\n         Predict: 2.0\n        Else (feature 3 \u003e 297.0)\n         Predict: 2.0\n      Else (feature 0 \u003e 3010.0)\n       If (feature 0 \u003c\u003d 3049.0)\n        If (feature 0 \u003c\u003d 3029.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 3029.0)\n         Predict: 2.0\n       Else (feature 0 \u003e 3049.0)\n        If (feature 3 \u003c\u003d 417.0)\n         Predict: 2.0\n        Else (feature 3 \u003e 417.0)\n         Predict: 1.0\n  Tree 17 (weight 1.0):\n    If (feature 10 \u003c\u003d 0.0)\n     If (feature 0 \u003c\u003d 2615.0)\n      If (feature 13 \u003c\u003d 0.0)\n       If (feature 24 \u003c\u003d 0.0)\n        If (feature 23 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 23 \u003e 0.0)\n         Predict: 6.0\n       Else (feature 24 \u003e 0.0)\n        If (feature 5 \u003c\u003d 2758.0)\n         Predict: 2.0\n        Else (feature 5 \u003e 2758.0)\n         Predict: 1.0\n      Else (feature 13 \u003e 0.0)\n       If (feature 3 \u003c\u003d 0.0)\n        If (feature 1 \u003c\u003d 217.0)\n         Predict: 4.0\n        Else (feature 1 \u003e 217.0)\n         Predict: 3.0\n       Else (feature 3 \u003e 0.0)\n        If (feature 29 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 29 \u003e 0.0)\n         Predict: 6.0\n     Else (feature 0 \u003e 2615.0)\n      If (feature 51 \u003c\u003d 0.0)\n       If (feature 35 \u003c\u003d 0.0)\n        If (feature 11 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 11 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 35 \u003e 0.0)\n        If (feature 12 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 12 \u003e 0.0)\n         Predict: 1.0\n      Else (feature 51 \u003e 0.0)\n       If (feature 3 \u003c\u003d 768.0)\n        If (feature 6 \u003c\u003d 204.0)\n         Predict: 7.0\n        Else (feature 6 \u003e 204.0)\n         Predict: 7.0\n       Else (feature 3 \u003e 768.0)\n        If (feature 4 \u003c\u003d 151.0)\n         Predict: 7.0\n        Else (feature 4 \u003e 151.0)\n         Predict: 7.0\n    Else (feature 10 \u003e 0.0)\n     If (feature 3 \u003c\u003d 90.0)\n      If (feature 51 \u003c\u003d 0.0)\n       If (feature 25 \u003c\u003d 0.0)\n        If (feature 4 \u003c\u003d 6.0)\n         Predict: 1.0\n        Else (feature 4 \u003e 6.0)\n         Predict: 2.0\n       Else (feature 25 \u003e 0.0)\n        If (feature 4 \u003c\u003d 9.0)\n         Predict: 2.0\n        Else (feature 4 \u003e 9.0)\n         Predict: 2.0\n      Else (feature 51 \u003e 0.0)\n       If (feature 2 \u003c\u003d 27.0)\n        If (feature 5 \u003c\u003d 4497.0)\n         Predict: 1.0\n        Else (feature 5 \u003e 4497.0)\n         Predict: 1.0\n       Else (feature 2 \u003e 27.0)\n        If (feature 0 \u003c\u003d 3283.0)\n         Predict: 1.0\n        Else (feature 0 \u003e 3283.0)\n         Predict: 1.0\n     Else (feature 3 \u003e 90.0)\n      If (feature 35 \u003c\u003d 0.0)\n       If (feature 32 \u003c\u003d 0.0)\n        If (feature 25 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 25 \u003e 0.0)\n         Predict: 2.0\n       Else (feature 32 \u003e 0.0)\n        If (feature 0 \u003c\u003d 2991.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2991.0)\n         Predict: 1.0\n      Else (feature 35 \u003e 0.0)\n       If (feature 1 \u003c\u003d 217.0)\n        If (feature 4 \u003c\u003d 14.0)\n         Predict: 1.0\n        Else (feature 4 \u003e 14.0)\n         Predict: 1.0\n       Else (feature 1 \u003e 217.0)\n        If (feature 2 \u003c\u003d 15.0)\n         Predict: 1.0\n        Else (feature 2 \u003e 15.0)\n         Predict: 1.0\n  Tree 18 (weight 1.0):\n    If (feature 23 \u003c\u003d 0.0)\n     If (feature 0 \u003c\u003d 3049.0)\n      If (feature 18 \u003c\u003d 0.0)\n       If (feature 13 \u003c\u003d 0.0)\n        If (feature 3 \u003c\u003d 67.0)\n         Predict: 2.0\n        Else (feature 3 \u003e 67.0)\n         Predict: 2.0\n       Else (feature 13 \u003e 0.0)\n        If (feature 9 \u003c\u003d 931.0)\n         Predict: 3.0\n        Else (feature 9 \u003e 931.0)\n         Predict: 3.0\n      Else (feature 18 \u003e 0.0)\n       If (feature 6 \u003c\u003d 215.0)\n        If (feature 4 \u003c\u003d 50.0)\n         Predict: 6.0\n        Else (feature 4 \u003e 50.0)\n         Predict: 3.0\n       Else (feature 6 \u003e 215.0)\n        If (feature 7 \u003c\u003d 212.0)\n         Predict: 3.0\n        Else (feature 7 \u003e 212.0)\n         Predict: 3.0\n     Else (feature 0 \u003e 3049.0)\n      If (feature 35 \u003c\u003d 0.0)\n       If (feature 0 \u003c\u003d 3317.0)\n        If (feature 36 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 36 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 0 \u003e 3317.0)\n        If (feature 51 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 51 \u003e 0.0)\n         Predict: 7.0\n      Else (feature 35 \u003e 0.0)\n       Predict: 1.0\n    Else (feature 23 \u003e 0.0)\n     If (feature 4 \u003c\u003d 108.0)\n      If (feature 13 \u003c\u003d 0.0)\n       If (feature 8 \u003c\u003d 125.0)\n        If (feature 8 \u003c\u003d 93.0)\n         Predict: 2.0\n        Else (feature 8 \u003e 93.0)\n         Predict: 2.0\n       Else (feature 8 \u003e 125.0)\n        If (feature 9 \u003c\u003d 1261.0)\n         Predict: 6.0\n        Else (feature 9 \u003e 1261.0)\n         Predict: 2.0\n      Else (feature 13 \u003e 0.0)\n       If (feature 3 \u003c\u003d 0.0)\n        If (feature 6 \u003c\u003d 190.0)\n         Predict: 3.0\n        Else (feature 6 \u003e 190.0)\n         Predict: 3.0\n       Else (feature 3 \u003e 0.0)\n        If (feature 5 \u003c\u003d 418.0)\n         Predict: 3.0\n        Else (feature 5 \u003e 418.0)\n         Predict: 3.0\n     Else (feature 4 \u003e 108.0)\n      If (feature 5 \u003c\u003d 1579.0)\n       If (feature 0 \u003c\u003d 2556.0)\n        If (feature 7 \u003c\u003d 237.0)\n         Predict: 3.0\n        Else (feature 7 \u003e 237.0)\n         Predict: 3.0\n       Else (feature 0 \u003e 2556.0)\n        If (feature 0 \u003c\u003d 2615.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 2615.0)\n         Predict: 2.0\n      Else (feature 5 \u003e 1579.0)\n       If (feature 3 \u003c\u003d 655.0)\n        If (feature 3 \u003c\u003d 446.0)\n         Predict: 2.0\n        Else (feature 3 \u003e 446.0)\n         Predict: 2.0\n       Else (feature 3 \u003e 655.0)\n        If (feature 6 \u003c\u003d 248.0)\n         Predict: 2.0\n        Else (feature 6 \u003e 248.0)\n         Predict: 2.0\n  Tree 19 (weight 1.0):\n    If (feature 17 \u003c\u003d 0.0)\n     If (feature 5 \u003c\u003d 1476.0)\n      If (feature 11 \u003c\u003d 0.0)\n       If (feature 35 \u003c\u003d 0.0)\n        If (feature 13 \u003c\u003d 0.0)\n         Predict: 2.0\n        Else (feature 13 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 35 \u003e 0.0)\n        If (feature 0 \u003c\u003d 3165.0)\n         Predict: 1.0\n        Else (feature 0 \u003e 3165.0)\n         Predict: 1.0\n      Else (feature 11 \u003e 0.0)\n       If (feature 35 \u003c\u003d 0.0)\n        If (feature 9 \u003c\u003d 2636.0)\n         Predict: 1.0\n        Else (feature 9 \u003e 2636.0)\n         Predict: 2.0\n       Else (feature 35 \u003e 0.0)\n        Predict: 1.0\n     Else (feature 5 \u003e 1476.0)\n      If (feature 42 \u003c\u003d 0.0)\n       If (feature 25 \u003c\u003d 0.0)\n        If (feature 52 \u003c\u003d 0.0)\n         Predict: 1.0\n        Else (feature 52 \u003e 0.0)\n         Predict: 1.0\n       Else (feature 25 \u003e 0.0)\n        If (feature 5 \u003c\u003d 4883.0)\n         Predict: 2.0\n        Else (feature 5 \u003e 4883.0)\n         Predict: 2.0\n      Else (feature 42 \u003e 0.0)\n       If (feature 1 \u003c\u003d 89.0)\n        If (feature 5 \u003c\u003d 2083.0)\n         Predict: 2.0\n        Else (feature 5 \u003e 2083.0)\n         Predict: 2.0\n       Else (feature 1 \u003e 89.0)\n        If (feature 0 \u003c\u003d 3049.0)\n         Predict: 2.0\n        Else (feature 0 \u003e 3049.0)\n         Predict: 1.0\n    Else (feature 17 \u003e 0.0)\n     If (feature 1 \u003c\u003d 166.0)\n      If (feature 6 \u003c\u003d 244.0)\n       If (feature 9 \u003c\u003d 1332.0)\n        If (feature 12 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 12 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 9 \u003e 1332.0)\n        If (feature 4 \u003c\u003d 124.0)\n         Predict: 3.0\n        Else (feature 4 \u003e 124.0)\n         Predict: 2.0\n      Else (feature 6 \u003e 244.0)\n       If (feature 3 \u003c\u003d 655.0)\n        If (feature 13 \u003c\u003d 0.0)\n         Predict: 3.0\n        Else (feature 13 \u003e 0.0)\n         Predict: 3.0\n       Else (feature 3 \u003e 655.0)\n        If (feature 7 \u003c\u003d 226.0)\n         Predict: 2.0\n        Else (feature 7 \u003e 226.0)\n         Predict: 7.0\n     Else (feature 1 \u003e 166.0)\n      Predict: 3.0\n\nimport org.apache.spark.ml.classification.RandomForestClassifier\nimport scala.util.Random\nclassifier: org.apache.spark.ml.classification.RandomForestClassifier \u003d rfc_82e328b1e6ac\nmodel: org.apache.spark.ml.classification.RandomForestClassificationModel \u003d RandomForestClassificationModel (uid\u003drfc_82e328b1e6ac) with 20 trees\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d400",
+            "http://172.17.0.2:4040/jobs/job?id\u003d401",
+            "http://172.17.0.2:4040/jobs/job?id\u003d402",
+            "http://172.17.0.2:4040/jobs/job?id\u003d403",
+            "http://172.17.0.2:4040/jobs/job?id\u003d404",
+            "http://172.17.0.2:4040/jobs/job?id\u003d405",
+            "http://172.17.0.2:4040/jobs/job?id\u003d406",
+            "http://172.17.0.2:4040/jobs/job?id\u003d407",
+            "http://172.17.0.2:4040/jobs/job?id\u003d408",
+            "http://172.17.0.2:4040/jobs/job?id\u003d409"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590148309281_-1776728911",
+      "id": "20200522-115149_4523964",
+      "dateCreated": "2020-05-22 11:51:49.281",
+      "dateStarted": "2020-05-22 13:51:12.313",
+      "dateFinished": "2020-05-22 13:51:30.559",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Feature importances",
+      "text": "val featureImpact \u003d model.featureImportances.toArray.zip(inputCols).sorted.reverse.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:51:30.653",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "(0.5231075356300747,Elevation)\n(0.12612606085048386,Wilderness_Area_3)\n(0.056549368650855816,Soil_Type_21)\n(0.04088503908646332,Soil_Type_9)\n(0.038996914182398805,Soil_Type_11)\n(0.029896258403188804,Soil_Type_3)\n(0.02871044633463592,Wilderness_Area_0)\n(0.027166123784389273,Horizontal_Distance_To_Roadways)\n(0.017776665612730072,Soil_Type_38)\n(0.015421968552662776,Soil_Type_37)\n(0.012992134433270863,Horizontal_Distance_To_Fire_Points)\n(0.011969135248784641,Wilderness_Area_1)\n(0.009472027979431648,Wilderness_Area_2)\n(0.008777911697682913,Soil_Type_22)\n(0.007140065578367616,Horizontal_Distance_To_Hydrology)\n(0.006368883817338645,Hillshade_Noon)\n(0.005917650668279687,Soil_Type_28)\n(0.004346856878204812,Soil_Type_10)\n(0.00404058391605699,Soil_Type_5)\n(0.0040172546488918826,Vertical_Distance_To_Hydrology)\n(0.003943526410232791,Soil_Type_1)\n(0.003282287745297381,Aspect)\n(0.0021931698561805353,Soil_Type_39)\n(0.0016873778887861388,Soil_Type_2)\n(0.001544267407327089,Hillshade_9am)\n(0.0015204887165110928,Soil_Type_31)\n(0.0015048873501951102,Hillshade_3pm)\n(9.926860533222312E-4,Slope)\n(9.245346427139546E-4,Soil_Type_4)\n(5.167714471342269E-4,Soil_Type_34)\n(4.3733927577634476E-4,Soil_Type_23)\n(4.2807932378678145E-4,Soil_Type_12)\n(4.2807243455552605E-4,Soil_Type_16)\n(2.8412397577392586E-4,Soil_Type_30)\n(2.4007668134414466E-4,Soil_Type_36)\n(2.309615832541953E-4,Soil_Type_18)\n(1.1658136830546535E-4,Soil_Type_24)\n(2.5683993630309828E-5,Soil_Type_15)\n(2.0197891679881113E-5,Soil_Type_13)\n(0.0,Soil_Type_8)\n(0.0,Soil_Type_7)\n(0.0,Soil_Type_6)\n(0.0,Soil_Type_35)\n(0.0,Soil_Type_33)\n(0.0,Soil_Type_32)\n(0.0,Soil_Type_29)\n(0.0,Soil_Type_27)\n(0.0,Soil_Type_26)\n(0.0,Soil_Type_25)\n(0.0,Soil_Type_20)\n(0.0,Soil_Type_19)\n(0.0,Soil_Type_17)\n(0.0,Soil_Type_14)\n(0.0,Soil_Type_0)\nfeatureImpact: Unit \u003d ()\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1590148567954_230355625",
+      "id": "20200522-115607_2112141477",
+      "dateCreated": "2020-05-22 11:56:07.954",
+      "dateStarted": "2020-05-22 13:51:30.752",
+      "dateFinished": "2020-05-22 13:51:31.169",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Predictions",
+      "text": "val predictions \u003d model.transform(assembledTrainData)\npredictions.select(\"Cover_Type\", \"prediction\", \"probability\").\n show(truncate \u003d false)",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:51:31.243",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----------+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------+\n|Cover_Type|prediction|probability                                                                                                                                          |\n+----------+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------+\n|3.0       |3.0       |[0.0,0.02980351797516028,0.16315123050687344,0.5106362604281388,0.06269986757504184,0.006328013918345328,0.2273783275007737,2.7820956664806973E-6]   |\n|3.0       |3.0       |[0.0,0.02980351797516028,0.16315123050687344,0.5106362604281388,0.06269986757504184,0.006328013918345328,0.2273783275007737,2.7820956664806973E-6]   |\n|6.0       |3.0       |[0.0,0.02980351797516028,0.16315123050687344,0.5106362604281388,0.06269986757504184,0.006328013918345328,0.2273783275007737,2.7820956664806973E-6]   |\n|3.0       |3.0       |[0.0,0.02980351797516028,0.16315123050687344,0.5106362604281388,0.06269986757504184,0.006328013918345328,0.2273783275007737,2.7820956664806973E-6]   |\n|3.0       |3.0       |[0.0,0.02980351797516028,0.16315123050687344,0.5106362604281388,0.06269986757504184,0.006328013918345328,0.2273783275007737,2.7820956664806973E-6]   |\n|3.0       |3.0       |[0.0,0.02980351797516028,0.16315123050687344,0.5106362604281388,0.06269986757504184,0.006328013918345328,0.2273783275007737,2.7820956664806973E-6]   |\n|6.0       |3.0       |[0.0,0.021819115886055698,0.12404358890994208,0.47892270466743314,0.049998605217986575,0.004319298605940657,0.3208939046169752,2.7820956664806973E-6]|\n|6.0       |3.0       |[0.0,0.02207419529338424,0.13792136355114343,0.5275899890080975,0.05922972239515548,0.0047229894940606105,0.24845895816249225,2.7820956664806973E-6] |\n|6.0       |3.0       |[0.0,0.02207419529338424,0.13792136355114343,0.5275899890080975,0.05922972239515548,0.0047229894940606105,0.24845895816249225,2.7820956664806973E-6] |\n|3.0       |3.0       |[0.0,0.02980351797516028,0.16315123050687344,0.5106362604281388,0.06269986757504184,0.006328013918345328,0.2273783275007737,2.7820956664806973E-6]   |\n|6.0       |3.0       |[0.0,0.021827187883161927,0.13790876494539187,0.5316242024630004,0.05704888443921931,0.0047285284182428874,0.246859649755317,2.782095666480697E-6]   |\n|6.0       |3.0       |[0.0,0.021819115886055698,0.13385780117190063,0.5274409484112451,0.05725847424580365,0.004319298605940657,0.2553015795833878,2.7820956664806973E-6]  |\n|3.0       |3.0       |[0.0,0.02207419529338424,0.13792136355114343,0.5275899890080975,0.05922972239515548,0.0047229894940606105,0.24845895816249225,2.7820956664806973E-6] |\n|6.0       |3.0       |[0.0,0.02980351797516028,0.15802587138922922,0.4045766473119523,0.14690621162948012,0.006328013918345328,0.2543569556801662,2.7820956664806973E-6]   |\n|3.0       |3.0       |[0.0,0.02980351797516028,0.16116102887840963,0.5091713436545537,0.05886806947210721,0.006328013918345328,0.23466524400575728,2.7820956664806973E-6]  |\n|6.0       |3.0       |[0.0,0.021827187883161927,0.13790876494539187,0.5316242024630004,0.05704888443921931,0.0047285284182428874,0.246859649755317,2.782095666480697E-6]   |\n|3.0       |3.0       |[0.0,0.02980351797516028,0.16116102887840963,0.5091713436545537,0.05886806947210721,0.006328013918345328,0.23466524400575728,2.7820956664806973E-6]  |\n|6.0       |3.0       |[0.0,0.021819115886055698,0.12404358890994208,0.5052030558494718,0.051208651402082785,0.004319298605940657,0.29340350725084047,2.7820956664806973E-6]|\n|6.0       |3.0       |[0.0,0.02157210847583339,0.1313402181519316,0.533149254785225,0.054343735413645136,0.004324837530122935,0.25526706354757545,2.7820956664806973E-6]   |\n|6.0       |3.0       |[0.0,0.02980351797516028,0.15802587138922922,0.4045766473119523,0.14690621162948012,0.006328013918345328,0.2543569556801662,2.7820956664806973E-6]   |\n+----------+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------+\nonly showing top 20 rows\n\npredictions: org.apache.spark.sql.DataFrame \u003d [Elevation: int, Aspect: int ... 57 more fields]\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d410"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590148726662_622149332",
+      "id": "20200522-115846_1084098791",
+      "dateCreated": "2020-05-22 11:58:46.662",
+      "dateStarted": "2020-05-22 13:51:31.288",
+      "dateFinished": "2020-05-22 13:51:31.726",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Evaluation",
+      "text": "import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator\n\nval evaluator \u003d new MulticlassClassificationEvaluator()\n .setLabelCol(\"Cover_Type\")\n .setPredictionCol(\"prediction\")\n \nval acc \u003d evaluator.setMetricName(\"accuracy\").evaluate(predictions)\nval f1 \u003d evaluator.setMetricName(\"f1\").evaluate(predictions)\n\nprint(acc)\nprint(f1)",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:51:31.788",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "0.67729175114960560.6473449406725096import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator\nevaluator: org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator \u003d mcEval_21bb67fb899e\nacc: Double \u003d 0.6772917511496056\nf1: Double \u003d 0.6473449406725096\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d411",
+            "http://172.17.0.2:4040/jobs/job?id\u003d412",
+            "http://172.17.0.2:4040/jobs/job?id\u003d413",
+            "http://172.17.0.2:4040/jobs/job?id\u003d414",
+            "http://172.17.0.2:4040/jobs/job?id\u003d415"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590148874322_-878747137",
+      "id": "20200522-120114_1153535296",
+      "dateCreated": "2020-05-22 12:01:14.322",
+      "dateStarted": "2020-05-22 13:51:31.869",
+      "dateFinished": "2020-05-22 13:52:01.353",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Confusion matrix",
+      "text": "import org.apache.spark.mllib.evaluation.MulticlassMetrics\n\nval predictionRDD \u003d predictions.select(\"prediction\", \"Cover_Type\").as[(Double,Double)].rdd\nval multiclassMetrics \u003d new MulticlassMetrics(predictionRDD)\nval confusionMatrix \u003d predictions.groupBy(\"Cover_Type\").pivot(\"prediction\", (1 to 7)).count().na.fill(0.0).orderBy(\"Cover_Type\")\n\nconfusionMatrix.show()",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:52:01.420",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----------+------+------+-----+---+---+---+---+\n|Cover_Type|     1|     2|    3|  4|  5|  6|  7|\n+----------+------+------+-----+---+---+---+---+\n|       1.0|140824| 49700|    0|  0|  0|  0|  0|\n|       2.0| 61335|190971| 2657|  0|  0|  0|  0|\n|       3.0|     0|  9854|22285|  0|  0|  0|  0|\n|       4.0|     0|     0| 2466|  0|  0|  0|  0|\n|       5.0|     0|  8540|    1|  0|  0|  0|  0|\n|       6.0|     0|  6637| 9044|  0|  0|  0|  0|\n|       7.0| 18406|    68|    0|  0|  0|  0|  0|\n+----------+------+------+-----+---+---+---+---+\n\nimport org.apache.spark.mllib.evaluation.MulticlassMetrics\npredictionRDD: org.apache.spark.rdd.RDD[(Double, Double)] \u003d MapPartitionsRDD[1744] at rdd at \u003cconsole\u003e:70\nmulticlassMetrics: org.apache.spark.mllib.evaluation.MulticlassMetrics \u003d org.apache.spark.mllib.evaluation.MulticlassMetrics@72d2bdbb\nconfusionMatrix: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Cover_Type: double, 1: bigint ... 6 more fields]\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d416"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590148942432_-136965325",
+      "id": "20200522-120222_1343302010",
+      "dateCreated": "2020-05-22 12:02:22.432",
+      "dateStarted": "2020-05-22 13:52:01.463",
+      "dateFinished": "2020-05-22 13:52:10.791",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Class probabilities",
+      "text": "import org.apache.spark.sql.DataFrame\n\ndef classProbabilities(data: DataFrame): Array[Double] \u003d {\n val total \u003d data.count()\n data.groupBy(\"Cover_Type\").count().orderBy(\"Cover_Type\").select(\"count\").as[Double].map(_ / total).collect()\n}\n\nval trainPriorProbabilities \u003d classProbabilities(trainData)\nval testPriorProbabilities \u003d classProbabilities(testData)\n\ntrainPriorProbabilities.zip(testPriorProbabilities).map {\n case (trainProb, cvProb) \u003d\u003e trainProb * cvProb\n}.sum",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:52:10.879",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.DataFrame\nclassProbabilities: (data: org.apache.spark.sql.DataFrame)Array[Double]\ntrainPriorProbabilities: Array[Double] \u003d Array(0.36443835742212904, 0.4876986464876776, 0.061476162421478686, 0.00471701722304261, 0.016337406367399405, 0.02999495015187801, 0.035337459926394636)\ntestPriorProbabilities: Array[Double] \u003d Array(0.36610332508931026, 0.4867065127782358, 0.06208779884583677, 0.004826188513327837, 0.016350645781808188, 0.028957131079967023, 0.034968397911514154)\nres20: Double \u003d 0.3769992759892691\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d417",
+            "http://172.17.0.2:4040/jobs/job?id\u003d418",
+            "http://172.17.0.2:4040/jobs/job?id\u003d419",
+            "http://172.17.0.2:4040/jobs/job?id\u003d420",
+            "http://172.17.0.2:4040/jobs/job?id\u003d421",
+            "http://172.17.0.2:4040/jobs/job?id\u003d422"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590149080907_151369983",
+      "id": "20200522-120440_1890178674",
+      "dateCreated": "2020-05-22 12:04:40.907",
+      "dateStarted": "2020-05-22 13:52:10.908",
+      "dateFinished": "2020-05-22 13:52:20.431",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Pipeline creation",
+      "text": "import org.apache.spark.ml.Pipeline\n\nval inputCols \u003d trainData.columns.filter(_ !\u003d \"Cover_Type\")\nval assembler \u003d new VectorAssembler().setInputCols(inputCols).setOutputCol(\"featureVector\")\nval classifier \u003d new RandomForestClassifier()\n .setSeed(Random.nextLong())\n .setLabelCol(\"Cover_Type\")\n .setFeaturesCol(\"featureVector\")\n .setPredictionCol(\"prediction\")\n \nval pipeline \u003d new Pipeline().setStages(Array(assembler, classifier))",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:52:20.530",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.ml.Pipeline\ninputCols: Array[String] \u003d Array(Elevation, Aspect, Slope, Horizontal_Distance_To_Hydrology, Vertical_Distance_To_Hydrology, Horizontal_Distance_To_Roadways, Hillshade_9am, Hillshade_Noon, Hillshade_3pm, Horizontal_Distance_To_Fire_Points, Wilderness_Area_0, Wilderness_Area_1, Wilderness_Area_2, Wilderness_Area_3, Soil_Type_0, Soil_Type_1, Soil_Type_2, Soil_Type_3, Soil_Type_4, Soil_Type_5, Soil_Type_6, Soil_Type_7, Soil_Type_8, Soil_Type_9, Soil_Type_10, Soil_Type_11, Soil_Type_12, Soil_Type_13, Soil_Type_14, Soil_Type_15, Soil_Type_16, Soil_Type_17, Soil_Type_18, Soil_Type_19, Soil_Type_20, Soil_Type_21, Soil_Type_22, Soil_Type_23, Soil_Type_24, Soil_Type_25, Soil_Type_26, Soil_Type_27, Soil_Type_28, Soil_Type_29, Soil_Type_30, Soil_Type_31, Soil_Ty..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1590149292200_653529527",
+      "id": "20200522-120812_232122447",
+      "dateCreated": "2020-05-22 12:08:12.200",
+      "dateStarted": "2020-05-22 13:52:20.571",
+      "dateFinished": "2020-05-22 13:52:20.908",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Create paramGrid",
+      "text": "import org.apache.spark.ml.tuning.ParamGridBuilder\n\nval paramGrid \u003d new ParamGridBuilder()\n .addGrid(classifier.impurity, Seq(\"gini\", \"entropy\"))\n .addGrid(classifier.maxDepth, Seq(1, 10))\n .addGrid(classifier.maxBins, Seq(40, 200))\n .addGrid(classifier.minInfoGain, Seq(0.0, 0.05))\n .build()\n \nval multiclassEval \u003d new MulticlassClassificationEvaluator()\n .setLabelCol(\"Cover_Type\")\n .setPredictionCol(\"prediction\")\n .setMetricName(\"accuracy\")",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:52:20.975",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.ml.tuning.ParamGridBuilder\nparamGrid: Array[org.apache.spark.ml.param.ParamMap] \u003d\nArray({\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}, {\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}, {\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}, {\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}, {\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.05..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1590149451438_-1858972057",
+      "id": "20200522-121051_172300881",
+      "dateCreated": "2020-05-22 12:10:51.439",
+      "dateStarted": "2020-05-22 13:52:21.063",
+      "dateFinished": "2020-05-22 13:52:21.304",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Validator",
+      "text": "import org.apache.spark.ml.tuning.TrainValidationSplit\n\nval validator \u003d new TrainValidationSplit()\n .setSeed(Random.nextLong())\n .setEstimator(pipeline)\n .setEvaluator(multiclassEval)\n .setEstimatorParamMaps(paramGrid)\n .setTrainRatio(0.9)\n \nval validatorModel \u003d validator.fit(trainData)\n",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:52:21.359",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.ml.tuning.TrainValidationSplit\nvalidator: org.apache.spark.ml.tuning.TrainValidationSplit \u003d tvs_dd20ddd21cb8\nvalidatorModel: org.apache.spark.ml.tuning.TrainValidationSplitModel \u003d tvs_dd20ddd21cb8\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d423",
+            "http://172.17.0.2:4040/jobs/job?id\u003d424",
+            "http://172.17.0.2:4040/jobs/job?id\u003d425",
+            "http://172.17.0.2:4040/jobs/job?id\u003d426",
+            "http://172.17.0.2:4040/jobs/job?id\u003d427",
+            "http://172.17.0.2:4040/jobs/job?id\u003d428",
+            "http://172.17.0.2:4040/jobs/job?id\u003d429",
+            "http://172.17.0.2:4040/jobs/job?id\u003d430",
+            "http://172.17.0.2:4040/jobs/job?id\u003d431",
+            "http://172.17.0.2:4040/jobs/job?id\u003d432",
+            "http://172.17.0.2:4040/jobs/job?id\u003d433",
+            "http://172.17.0.2:4040/jobs/job?id\u003d434",
+            "http://172.17.0.2:4040/jobs/job?id\u003d435",
+            "http://172.17.0.2:4040/jobs/job?id\u003d436",
+            "http://172.17.0.2:4040/jobs/job?id\u003d437",
+            "http://172.17.0.2:4040/jobs/job?id\u003d438",
+            "http://172.17.0.2:4040/jobs/job?id\u003d439",
+            "http://172.17.0.2:4040/jobs/job?id\u003d440",
+            "http://172.17.0.2:4040/jobs/job?id\u003d441",
+            "http://172.17.0.2:4040/jobs/job?id\u003d442",
+            "http://172.17.0.2:4040/jobs/job?id\u003d443",
+            "http://172.17.0.2:4040/jobs/job?id\u003d444",
+            "http://172.17.0.2:4040/jobs/job?id\u003d445",
+            "http://172.17.0.2:4040/jobs/job?id\u003d446",
+            "http://172.17.0.2:4040/jobs/job?id\u003d447",
+            "http://172.17.0.2:4040/jobs/job?id\u003d448",
+            "http://172.17.0.2:4040/jobs/job?id\u003d449",
+            "http://172.17.0.2:4040/jobs/job?id\u003d450",
+            "http://172.17.0.2:4040/jobs/job?id\u003d451",
+            "http://172.17.0.2:4040/jobs/job?id\u003d452",
+            "http://172.17.0.2:4040/jobs/job?id\u003d453",
+            "http://172.17.0.2:4040/jobs/job?id\u003d454",
+            "http://172.17.0.2:4040/jobs/job?id\u003d455",
+            "http://172.17.0.2:4040/jobs/job?id\u003d456",
+            "http://172.17.0.2:4040/jobs/job?id\u003d457",
+            "http://172.17.0.2:4040/jobs/job?id\u003d458",
+            "http://172.17.0.2:4040/jobs/job?id\u003d459",
+            "http://172.17.0.2:4040/jobs/job?id\u003d460",
+            "http://172.17.0.2:4040/jobs/job?id\u003d461",
+            "http://172.17.0.2:4040/jobs/job?id\u003d462",
+            "http://172.17.0.2:4040/jobs/job?id\u003d463",
+            "http://172.17.0.2:4040/jobs/job?id\u003d464",
+            "http://172.17.0.2:4040/jobs/job?id\u003d465",
+            "http://172.17.0.2:4040/jobs/job?id\u003d466",
+            "http://172.17.0.2:4040/jobs/job?id\u003d467",
+            "http://172.17.0.2:4040/jobs/job?id\u003d468",
+            "http://172.17.0.2:4040/jobs/job?id\u003d469",
+            "http://172.17.0.2:4040/jobs/job?id\u003d470",
+            "http://172.17.0.2:4040/jobs/job?id\u003d471",
+            "http://172.17.0.2:4040/jobs/job?id\u003d472",
+            "http://172.17.0.2:4040/jobs/job?id\u003d473",
+            "http://172.17.0.2:4040/jobs/job?id\u003d474",
+            "http://172.17.0.2:4040/jobs/job?id\u003d475",
+            "http://172.17.0.2:4040/jobs/job?id\u003d476",
+            "http://172.17.0.2:4040/jobs/job?id\u003d477",
+            "http://172.17.0.2:4040/jobs/job?id\u003d478",
+            "http://172.17.0.2:4040/jobs/job?id\u003d479",
+            "http://172.17.0.2:4040/jobs/job?id\u003d480",
+            "http://172.17.0.2:4040/jobs/job?id\u003d481",
+            "http://172.17.0.2:4040/jobs/job?id\u003d482",
+            "http://172.17.0.2:4040/jobs/job?id\u003d483",
+            "http://172.17.0.2:4040/jobs/job?id\u003d484",
+            "http://172.17.0.2:4040/jobs/job?id\u003d485",
+            "http://172.17.0.2:4040/jobs/job?id\u003d486",
+            "http://172.17.0.2:4040/jobs/job?id\u003d487",
+            "http://172.17.0.2:4040/jobs/job?id\u003d488",
+            "http://172.17.0.2:4040/jobs/job?id\u003d489",
+            "http://172.17.0.2:4040/jobs/job?id\u003d490",
+            "http://172.17.0.2:4040/jobs/job?id\u003d491",
+            "http://172.17.0.2:4040/jobs/job?id\u003d492",
+            "http://172.17.0.2:4040/jobs/job?id\u003d493",
+            "http://172.17.0.2:4040/jobs/job?id\u003d494",
+            "http://172.17.0.2:4040/jobs/job?id\u003d495",
+            "http://172.17.0.2:4040/jobs/job?id\u003d496",
+            "http://172.17.0.2:4040/jobs/job?id\u003d497",
+            "http://172.17.0.2:4040/jobs/job?id\u003d498",
+            "http://172.17.0.2:4040/jobs/job?id\u003d499",
+            "http://172.17.0.2:4040/jobs/job?id\u003d500",
+            "http://172.17.0.2:4040/jobs/job?id\u003d501",
+            "http://172.17.0.2:4040/jobs/job?id\u003d502",
+            "http://172.17.0.2:4040/jobs/job?id\u003d503",
+            "http://172.17.0.2:4040/jobs/job?id\u003d504",
+            "http://172.17.0.2:4040/jobs/job?id\u003d505",
+            "http://172.17.0.2:4040/jobs/job?id\u003d506",
+            "http://172.17.0.2:4040/jobs/job?id\u003d507",
+            "http://172.17.0.2:4040/jobs/job?id\u003d508",
+            "http://172.17.0.2:4040/jobs/job?id\u003d509",
+            "http://172.17.0.2:4040/jobs/job?id\u003d510",
+            "http://172.17.0.2:4040/jobs/job?id\u003d511",
+            "http://172.17.0.2:4040/jobs/job?id\u003d512",
+            "http://172.17.0.2:4040/jobs/job?id\u003d513",
+            "http://172.17.0.2:4040/jobs/job?id\u003d514",
+            "http://172.17.0.2:4040/jobs/job?id\u003d515",
+            "http://172.17.0.2:4040/jobs/job?id\u003d516",
+            "http://172.17.0.2:4040/jobs/job?id\u003d517",
+            "http://172.17.0.2:4040/jobs/job?id\u003d518",
+            "http://172.17.0.2:4040/jobs/job?id\u003d519",
+            "http://172.17.0.2:4040/jobs/job?id\u003d520",
+            "http://172.17.0.2:4040/jobs/job?id\u003d521",
+            "http://172.17.0.2:4040/jobs/job?id\u003d522",
+            "http://172.17.0.2:4040/jobs/job?id\u003d523",
+            "http://172.17.0.2:4040/jobs/job?id\u003d524",
+            "http://172.17.0.2:4040/jobs/job?id\u003d525",
+            "http://172.17.0.2:4040/jobs/job?id\u003d526",
+            "http://172.17.0.2:4040/jobs/job?id\u003d527",
+            "http://172.17.0.2:4040/jobs/job?id\u003d528",
+            "http://172.17.0.2:4040/jobs/job?id\u003d529",
+            "http://172.17.0.2:4040/jobs/job?id\u003d530",
+            "http://172.17.0.2:4040/jobs/job?id\u003d531",
+            "http://172.17.0.2:4040/jobs/job?id\u003d532",
+            "http://172.17.0.2:4040/jobs/job?id\u003d533",
+            "http://172.17.0.2:4040/jobs/job?id\u003d534",
+            "http://172.17.0.2:4040/jobs/job?id\u003d535",
+            "http://172.17.0.2:4040/jobs/job?id\u003d536",
+            "http://172.17.0.2:4040/jobs/job?id\u003d537",
+            "http://172.17.0.2:4040/jobs/job?id\u003d538",
+            "http://172.17.0.2:4040/jobs/job?id\u003d539",
+            "http://172.17.0.2:4040/jobs/job?id\u003d540",
+            "http://172.17.0.2:4040/jobs/job?id\u003d541",
+            "http://172.17.0.2:4040/jobs/job?id\u003d542",
+            "http://172.17.0.2:4040/jobs/job?id\u003d543",
+            "http://172.17.0.2:4040/jobs/job?id\u003d544",
+            "http://172.17.0.2:4040/jobs/job?id\u003d545",
+            "http://172.17.0.2:4040/jobs/job?id\u003d546",
+            "http://172.17.0.2:4040/jobs/job?id\u003d547",
+            "http://172.17.0.2:4040/jobs/job?id\u003d548",
+            "http://172.17.0.2:4040/jobs/job?id\u003d549",
+            "http://172.17.0.2:4040/jobs/job?id\u003d550",
+            "http://172.17.0.2:4040/jobs/job?id\u003d551",
+            "http://172.17.0.2:4040/jobs/job?id\u003d552",
+            "http://172.17.0.2:4040/jobs/job?id\u003d553",
+            "http://172.17.0.2:4040/jobs/job?id\u003d554",
+            "http://172.17.0.2:4040/jobs/job?id\u003d555",
+            "http://172.17.0.2:4040/jobs/job?id\u003d556",
+            "http://172.17.0.2:4040/jobs/job?id\u003d557",
+            "http://172.17.0.2:4040/jobs/job?id\u003d558",
+            "http://172.17.0.2:4040/jobs/job?id\u003d559",
+            "http://172.17.0.2:4040/jobs/job?id\u003d560",
+            "http://172.17.0.2:4040/jobs/job?id\u003d561",
+            "http://172.17.0.2:4040/jobs/job?id\u003d562",
+            "http://172.17.0.2:4040/jobs/job?id\u003d563",
+            "http://172.17.0.2:4040/jobs/job?id\u003d564",
+            "http://172.17.0.2:4040/jobs/job?id\u003d565",
+            "http://172.17.0.2:4040/jobs/job?id\u003d566",
+            "http://172.17.0.2:4040/jobs/job?id\u003d567",
+            "http://172.17.0.2:4040/jobs/job?id\u003d568",
+            "http://172.17.0.2:4040/jobs/job?id\u003d569",
+            "http://172.17.0.2:4040/jobs/job?id\u003d570",
+            "http://172.17.0.2:4040/jobs/job?id\u003d571",
+            "http://172.17.0.2:4040/jobs/job?id\u003d572",
+            "http://172.17.0.2:4040/jobs/job?id\u003d573",
+            "http://172.17.0.2:4040/jobs/job?id\u003d574",
+            "http://172.17.0.2:4040/jobs/job?id\u003d575",
+            "http://172.17.0.2:4040/jobs/job?id\u003d576",
+            "http://172.17.0.2:4040/jobs/job?id\u003d577",
+            "http://172.17.0.2:4040/jobs/job?id\u003d578",
+            "http://172.17.0.2:4040/jobs/job?id\u003d579",
+            "http://172.17.0.2:4040/jobs/job?id\u003d580",
+            "http://172.17.0.2:4040/jobs/job?id\u003d581",
+            "http://172.17.0.2:4040/jobs/job?id\u003d582",
+            "http://172.17.0.2:4040/jobs/job?id\u003d583",
+            "http://172.17.0.2:4040/jobs/job?id\u003d584",
+            "http://172.17.0.2:4040/jobs/job?id\u003d585",
+            "http://172.17.0.2:4040/jobs/job?id\u003d586",
+            "http://172.17.0.2:4040/jobs/job?id\u003d587",
+            "http://172.17.0.2:4040/jobs/job?id\u003d588",
+            "http://172.17.0.2:4040/jobs/job?id\u003d589",
+            "http://172.17.0.2:4040/jobs/job?id\u003d590",
+            "http://172.17.0.2:4040/jobs/job?id\u003d591",
+            "http://172.17.0.2:4040/jobs/job?id\u003d592",
+            "http://172.17.0.2:4040/jobs/job?id\u003d593",
+            "http://172.17.0.2:4040/jobs/job?id\u003d594",
+            "http://172.17.0.2:4040/jobs/job?id\u003d595",
+            "http://172.17.0.2:4040/jobs/job?id\u003d596",
+            "http://172.17.0.2:4040/jobs/job?id\u003d597",
+            "http://172.17.0.2:4040/jobs/job?id\u003d598",
+            "http://172.17.0.2:4040/jobs/job?id\u003d599",
+            "http://172.17.0.2:4040/jobs/job?id\u003d600",
+            "http://172.17.0.2:4040/jobs/job?id\u003d601",
+            "http://172.17.0.2:4040/jobs/job?id\u003d602",
+            "http://172.17.0.2:4040/jobs/job?id\u003d603",
+            "http://172.17.0.2:4040/jobs/job?id\u003d604",
+            "http://172.17.0.2:4040/jobs/job?id\u003d605",
+            "http://172.17.0.2:4040/jobs/job?id\u003d606",
+            "http://172.17.0.2:4040/jobs/job?id\u003d607",
+            "http://172.17.0.2:4040/jobs/job?id\u003d608",
+            "http://172.17.0.2:4040/jobs/job?id\u003d609",
+            "http://172.17.0.2:4040/jobs/job?id\u003d610",
+            "http://172.17.0.2:4040/jobs/job?id\u003d611",
+            "http://172.17.0.2:4040/jobs/job?id\u003d612",
+            "http://172.17.0.2:4040/jobs/job?id\u003d613",
+            "http://172.17.0.2:4040/jobs/job?id\u003d614",
+            "http://172.17.0.2:4040/jobs/job?id\u003d615",
+            "http://172.17.0.2:4040/jobs/job?id\u003d616",
+            "http://172.17.0.2:4040/jobs/job?id\u003d617",
+            "http://172.17.0.2:4040/jobs/job?id\u003d618",
+            "http://172.17.0.2:4040/jobs/job?id\u003d619",
+            "http://172.17.0.2:4040/jobs/job?id\u003d620",
+            "http://172.17.0.2:4040/jobs/job?id\u003d621",
+            "http://172.17.0.2:4040/jobs/job?id\u003d622",
+            "http://172.17.0.2:4040/jobs/job?id\u003d623"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590149567176_1138577314",
+      "id": "20200522-121247_1908914091",
+      "dateCreated": "2020-05-22 12:12:47.176",
+      "dateStarted": "2020-05-22 13:52:21.419",
+      "dateFinished": "2020-05-22 13:57:59.621",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Get best model",
+      "text": "import org.apache.spark.ml.PipelineModel\n\nval bestModel \u003d validatorModel.bestModel\nbestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 13:57:59.719",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "title": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.ml.PipelineModel\nbestModel: org.apache.spark.ml.Model[_] \u003d pipeline_0d0aaaa1d131\nres21: org.apache.spark.ml.param.ParamMap \u003d\n{\n\trfc_30aa0955f6de-cacheNodeIds: false,\n\trfc_30aa0955f6de-checkpointInterval: 10,\n\trfc_30aa0955f6de-featureSubsetStrategy: auto,\n\trfc_30aa0955f6de-featuresCol: featureVector,\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-labelCol: Cover_Type,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-maxMemoryInMB: 256,\n\trfc_30aa0955f6de-minInfoGain: 0.0,\n\trfc_30aa0955f6de-minInstancesPerNode: 1,\n\trfc_30aa0955f6de-numTrees: 20,\n\trfc_30aa0955f6de-predictionCol: prediction,\n\trfc_30aa0955f6de-probabilityCol: probability,\n\trfc_30aa0955f6de-rawPredictionCol: rawPrediction,\n\trfc_30aa0955f6de-seed: -6274567387349216..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1590149615021_588619769",
+      "id": "20200522-121335_525167696",
+      "dateCreated": "2020-05-22 12:13:35.021",
+      "dateStarted": "2020-05-22 13:57:59.758",
+      "dateFinished": "2020-05-22 13:57:59.989",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Get best model params",
+      "text": "val validatorModel \u003d validator.fit(trainData)\nval paramsAndMetrics \u003d validatorModel.validationMetrics.zip(validatorModel.getEstimatorParamMaps).sortBy(-_._1)\n\nparamsAndMetrics.foreach { case (metric, params) \u003d\u003e\n println(metric)\n println(params)\n println()\n}",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 14:05:35.349",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "0.7514861422064386\n{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}\n\n0.7505404153477959\n{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}\n\n0.7431483054118737\n{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}\n\n0.7388056820813711\n{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}\n\n0.5191075426542113\n{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.05\n}\n\n0.5166756735891299\n{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.05\n}\n\n0.5115610283332047\n{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}\n\n0.5112329190149\n{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}\n\n0.4846560642322242\n{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}\n\n0.4846560642322242\n{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.05\n}\n\n0.4846560642322242\n{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.05\n}\n\n0.4846560642322242\n{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.05\n}\n\n0.4846560642322242\n{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}\n\n0.4846560642322242\n{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.05\n}\n\n0.4846560642322242\n{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 1,\n\trfc_30aa0955f6de-minInfoGain: 0.05\n}\n\n0.4846560642322242\n{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.05\n}\n\nvalidatorModel: org.apache.spark.ml.tuning.TrainValidationSplitModel \u003d tvs_dd20ddd21cb8\nparamsAndMetrics: Array[(Double, org.apache.spark.ml.param.ParamMap)] \u003d\nArray((0.7514861422064386,{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}), (0.7505404153477959,{\n\trfc_30aa0955f6de-impurity: entropy,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}), (0.7431483054118737,{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 40,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain: 0.0\n}), (0.7388056820813711,{\n\trfc_30aa0955f6de-impurity: gini,\n\trfc_30aa0955f6de-maxBins: 200,\n\trfc_30aa0955f6de-maxDepth: 10,\n\trfc_30aa0955f6de-minInfoGain:..."
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d624",
+            "http://172.17.0.2:4040/jobs/job?id\u003d625",
+            "http://172.17.0.2:4040/jobs/job?id\u003d626",
+            "http://172.17.0.2:4040/jobs/job?id\u003d627",
+            "http://172.17.0.2:4040/jobs/job?id\u003d628",
+            "http://172.17.0.2:4040/jobs/job?id\u003d629",
+            "http://172.17.0.2:4040/jobs/job?id\u003d630",
+            "http://172.17.0.2:4040/jobs/job?id\u003d631",
+            "http://172.17.0.2:4040/jobs/job?id\u003d632",
+            "http://172.17.0.2:4040/jobs/job?id\u003d633",
+            "http://172.17.0.2:4040/jobs/job?id\u003d634",
+            "http://172.17.0.2:4040/jobs/job?id\u003d635",
+            "http://172.17.0.2:4040/jobs/job?id\u003d636",
+            "http://172.17.0.2:4040/jobs/job?id\u003d637",
+            "http://172.17.0.2:4040/jobs/job?id\u003d638",
+            "http://172.17.0.2:4040/jobs/job?id\u003d639",
+            "http://172.17.0.2:4040/jobs/job?id\u003d640",
+            "http://172.17.0.2:4040/jobs/job?id\u003d641",
+            "http://172.17.0.2:4040/jobs/job?id\u003d642",
+            "http://172.17.0.2:4040/jobs/job?id\u003d643",
+            "http://172.17.0.2:4040/jobs/job?id\u003d644",
+            "http://172.17.0.2:4040/jobs/job?id\u003d645",
+            "http://172.17.0.2:4040/jobs/job?id\u003d646",
+            "http://172.17.0.2:4040/jobs/job?id\u003d647",
+            "http://172.17.0.2:4040/jobs/job?id\u003d648",
+            "http://172.17.0.2:4040/jobs/job?id\u003d649",
+            "http://172.17.0.2:4040/jobs/job?id\u003d650",
+            "http://172.17.0.2:4040/jobs/job?id\u003d651",
+            "http://172.17.0.2:4040/jobs/job?id\u003d652",
+            "http://172.17.0.2:4040/jobs/job?id\u003d653",
+            "http://172.17.0.2:4040/jobs/job?id\u003d654",
+            "http://172.17.0.2:4040/jobs/job?id\u003d655",
+            "http://172.17.0.2:4040/jobs/job?id\u003d656",
+            "http://172.17.0.2:4040/jobs/job?id\u003d657",
+            "http://172.17.0.2:4040/jobs/job?id\u003d658",
+            "http://172.17.0.2:4040/jobs/job?id\u003d659",
+            "http://172.17.0.2:4040/jobs/job?id\u003d660",
+            "http://172.17.0.2:4040/jobs/job?id\u003d661",
+            "http://172.17.0.2:4040/jobs/job?id\u003d662",
+            "http://172.17.0.2:4040/jobs/job?id\u003d663",
+            "http://172.17.0.2:4040/jobs/job?id\u003d664",
+            "http://172.17.0.2:4040/jobs/job?id\u003d665",
+            "http://172.17.0.2:4040/jobs/job?id\u003d666",
+            "http://172.17.0.2:4040/jobs/job?id\u003d667",
+            "http://172.17.0.2:4040/jobs/job?id\u003d668",
+            "http://172.17.0.2:4040/jobs/job?id\u003d669",
+            "http://172.17.0.2:4040/jobs/job?id\u003d670",
+            "http://172.17.0.2:4040/jobs/job?id\u003d671",
+            "http://172.17.0.2:4040/jobs/job?id\u003d672",
+            "http://172.17.0.2:4040/jobs/job?id\u003d673",
+            "http://172.17.0.2:4040/jobs/job?id\u003d674",
+            "http://172.17.0.2:4040/jobs/job?id\u003d675",
+            "http://172.17.0.2:4040/jobs/job?id\u003d676",
+            "http://172.17.0.2:4040/jobs/job?id\u003d677",
+            "http://172.17.0.2:4040/jobs/job?id\u003d678",
+            "http://172.17.0.2:4040/jobs/job?id\u003d679",
+            "http://172.17.0.2:4040/jobs/job?id\u003d680",
+            "http://172.17.0.2:4040/jobs/job?id\u003d681",
+            "http://172.17.0.2:4040/jobs/job?id\u003d682",
+            "http://172.17.0.2:4040/jobs/job?id\u003d683",
+            "http://172.17.0.2:4040/jobs/job?id\u003d684",
+            "http://172.17.0.2:4040/jobs/job?id\u003d685",
+            "http://172.17.0.2:4040/jobs/job?id\u003d686",
+            "http://172.17.0.2:4040/jobs/job?id\u003d687",
+            "http://172.17.0.2:4040/jobs/job?id\u003d688",
+            "http://172.17.0.2:4040/jobs/job?id\u003d689",
+            "http://172.17.0.2:4040/jobs/job?id\u003d690",
+            "http://172.17.0.2:4040/jobs/job?id\u003d691",
+            "http://172.17.0.2:4040/jobs/job?id\u003d692",
+            "http://172.17.0.2:4040/jobs/job?id\u003d693",
+            "http://172.17.0.2:4040/jobs/job?id\u003d694",
+            "http://172.17.0.2:4040/jobs/job?id\u003d695",
+            "http://172.17.0.2:4040/jobs/job?id\u003d696",
+            "http://172.17.0.2:4040/jobs/job?id\u003d697",
+            "http://172.17.0.2:4040/jobs/job?id\u003d698",
+            "http://172.17.0.2:4040/jobs/job?id\u003d699",
+            "http://172.17.0.2:4040/jobs/job?id\u003d700",
+            "http://172.17.0.2:4040/jobs/job?id\u003d701",
+            "http://172.17.0.2:4040/jobs/job?id\u003d702",
+            "http://172.17.0.2:4040/jobs/job?id\u003d703",
+            "http://172.17.0.2:4040/jobs/job?id\u003d704",
+            "http://172.17.0.2:4040/jobs/job?id\u003d705",
+            "http://172.17.0.2:4040/jobs/job?id\u003d706",
+            "http://172.17.0.2:4040/jobs/job?id\u003d707",
+            "http://172.17.0.2:4040/jobs/job?id\u003d708",
+            "http://172.17.0.2:4040/jobs/job?id\u003d709",
+            "http://172.17.0.2:4040/jobs/job?id\u003d710",
+            "http://172.17.0.2:4040/jobs/job?id\u003d711",
+            "http://172.17.0.2:4040/jobs/job?id\u003d712",
+            "http://172.17.0.2:4040/jobs/job?id\u003d713",
+            "http://172.17.0.2:4040/jobs/job?id\u003d714",
+            "http://172.17.0.2:4040/jobs/job?id\u003d715",
+            "http://172.17.0.2:4040/jobs/job?id\u003d716",
+            "http://172.17.0.2:4040/jobs/job?id\u003d717",
+            "http://172.17.0.2:4040/jobs/job?id\u003d718",
+            "http://172.17.0.2:4040/jobs/job?id\u003d719",
+            "http://172.17.0.2:4040/jobs/job?id\u003d720",
+            "http://172.17.0.2:4040/jobs/job?id\u003d721",
+            "http://172.17.0.2:4040/jobs/job?id\u003d722",
+            "http://172.17.0.2:4040/jobs/job?id\u003d723",
+            "http://172.17.0.2:4040/jobs/job?id\u003d724",
+            "http://172.17.0.2:4040/jobs/job?id\u003d725",
+            "http://172.17.0.2:4040/jobs/job?id\u003d726",
+            "http://172.17.0.2:4040/jobs/job?id\u003d727",
+            "http://172.17.0.2:4040/jobs/job?id\u003d728",
+            "http://172.17.0.2:4040/jobs/job?id\u003d729",
+            "http://172.17.0.2:4040/jobs/job?id\u003d730",
+            "http://172.17.0.2:4040/jobs/job?id\u003d731",
+            "http://172.17.0.2:4040/jobs/job?id\u003d732",
+            "http://172.17.0.2:4040/jobs/job?id\u003d733",
+            "http://172.17.0.2:4040/jobs/job?id\u003d734",
+            "http://172.17.0.2:4040/jobs/job?id\u003d735",
+            "http://172.17.0.2:4040/jobs/job?id\u003d736",
+            "http://172.17.0.2:4040/jobs/job?id\u003d737",
+            "http://172.17.0.2:4040/jobs/job?id\u003d738",
+            "http://172.17.0.2:4040/jobs/job?id\u003d739",
+            "http://172.17.0.2:4040/jobs/job?id\u003d740",
+            "http://172.17.0.2:4040/jobs/job?id\u003d741",
+            "http://172.17.0.2:4040/jobs/job?id\u003d742",
+            "http://172.17.0.2:4040/jobs/job?id\u003d743",
+            "http://172.17.0.2:4040/jobs/job?id\u003d744",
+            "http://172.17.0.2:4040/jobs/job?id\u003d745",
+            "http://172.17.0.2:4040/jobs/job?id\u003d746",
+            "http://172.17.0.2:4040/jobs/job?id\u003d747",
+            "http://172.17.0.2:4040/jobs/job?id\u003d748",
+            "http://172.17.0.2:4040/jobs/job?id\u003d749",
+            "http://172.17.0.2:4040/jobs/job?id\u003d750",
+            "http://172.17.0.2:4040/jobs/job?id\u003d751",
+            "http://172.17.0.2:4040/jobs/job?id\u003d752",
+            "http://172.17.0.2:4040/jobs/job?id\u003d753",
+            "http://172.17.0.2:4040/jobs/job?id\u003d754",
+            "http://172.17.0.2:4040/jobs/job?id\u003d755",
+            "http://172.17.0.2:4040/jobs/job?id\u003d756",
+            "http://172.17.0.2:4040/jobs/job?id\u003d757",
+            "http://172.17.0.2:4040/jobs/job?id\u003d758",
+            "http://172.17.0.2:4040/jobs/job?id\u003d759",
+            "http://172.17.0.2:4040/jobs/job?id\u003d760",
+            "http://172.17.0.2:4040/jobs/job?id\u003d761",
+            "http://172.17.0.2:4040/jobs/job?id\u003d762",
+            "http://172.17.0.2:4040/jobs/job?id\u003d763",
+            "http://172.17.0.2:4040/jobs/job?id\u003d764",
+            "http://172.17.0.2:4040/jobs/job?id\u003d765",
+            "http://172.17.0.2:4040/jobs/job?id\u003d766",
+            "http://172.17.0.2:4040/jobs/job?id\u003d767",
+            "http://172.17.0.2:4040/jobs/job?id\u003d768",
+            "http://172.17.0.2:4040/jobs/job?id\u003d769",
+            "http://172.17.0.2:4040/jobs/job?id\u003d770",
+            "http://172.17.0.2:4040/jobs/job?id\u003d771",
+            "http://172.17.0.2:4040/jobs/job?id\u003d772",
+            "http://172.17.0.2:4040/jobs/job?id\u003d773",
+            "http://172.17.0.2:4040/jobs/job?id\u003d774",
+            "http://172.17.0.2:4040/jobs/job?id\u003d775",
+            "http://172.17.0.2:4040/jobs/job?id\u003d776",
+            "http://172.17.0.2:4040/jobs/job?id\u003d777",
+            "http://172.17.0.2:4040/jobs/job?id\u003d778",
+            "http://172.17.0.2:4040/jobs/job?id\u003d779",
+            "http://172.17.0.2:4040/jobs/job?id\u003d780",
+            "http://172.17.0.2:4040/jobs/job?id\u003d781",
+            "http://172.17.0.2:4040/jobs/job?id\u003d782",
+            "http://172.17.0.2:4040/jobs/job?id\u003d783",
+            "http://172.17.0.2:4040/jobs/job?id\u003d784",
+            "http://172.17.0.2:4040/jobs/job?id\u003d785",
+            "http://172.17.0.2:4040/jobs/job?id\u003d786",
+            "http://172.17.0.2:4040/jobs/job?id\u003d787",
+            "http://172.17.0.2:4040/jobs/job?id\u003d788",
+            "http://172.17.0.2:4040/jobs/job?id\u003d789",
+            "http://172.17.0.2:4040/jobs/job?id\u003d790",
+            "http://172.17.0.2:4040/jobs/job?id\u003d791",
+            "http://172.17.0.2:4040/jobs/job?id\u003d792",
+            "http://172.17.0.2:4040/jobs/job?id\u003d793",
+            "http://172.17.0.2:4040/jobs/job?id\u003d794",
+            "http://172.17.0.2:4040/jobs/job?id\u003d795",
+            "http://172.17.0.2:4040/jobs/job?id\u003d796",
+            "http://172.17.0.2:4040/jobs/job?id\u003d797",
+            "http://172.17.0.2:4040/jobs/job?id\u003d798",
+            "http://172.17.0.2:4040/jobs/job?id\u003d799",
+            "http://172.17.0.2:4040/jobs/job?id\u003d800",
+            "http://172.17.0.2:4040/jobs/job?id\u003d801",
+            "http://172.17.0.2:4040/jobs/job?id\u003d802",
+            "http://172.17.0.2:4040/jobs/job?id\u003d803",
+            "http://172.17.0.2:4040/jobs/job?id\u003d804",
+            "http://172.17.0.2:4040/jobs/job?id\u003d805",
+            "http://172.17.0.2:4040/jobs/job?id\u003d806",
+            "http://172.17.0.2:4040/jobs/job?id\u003d807",
+            "http://172.17.0.2:4040/jobs/job?id\u003d808",
+            "http://172.17.0.2:4040/jobs/job?id\u003d809",
+            "http://172.17.0.2:4040/jobs/job?id\u003d810",
+            "http://172.17.0.2:4040/jobs/job?id\u003d811",
+            "http://172.17.0.2:4040/jobs/job?id\u003d812",
+            "http://172.17.0.2:4040/jobs/job?id\u003d813",
+            "http://172.17.0.2:4040/jobs/job?id\u003d814",
+            "http://172.17.0.2:4040/jobs/job?id\u003d815",
+            "http://172.17.0.2:4040/jobs/job?id\u003d816",
+            "http://172.17.0.2:4040/jobs/job?id\u003d817",
+            "http://172.17.0.2:4040/jobs/job?id\u003d818",
+            "http://172.17.0.2:4040/jobs/job?id\u003d819",
+            "http://172.17.0.2:4040/jobs/job?id\u003d820",
+            "http://172.17.0.2:4040/jobs/job?id\u003d821",
+            "http://172.17.0.2:4040/jobs/job?id\u003d822",
+            "http://172.17.0.2:4040/jobs/job?id\u003d823",
+            "http://172.17.0.2:4040/jobs/job?id\u003d824"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590152582663_162776300",
+      "id": "20200522-130302_597846835",
+      "dateCreated": "2020-05-22 13:03:02.663",
+      "dateStarted": "2020-05-22 13:58:00.081",
+      "dateFinished": "2020-05-22 14:03:49.722",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Evaluate model",
+      "text": "validatorModel.validationMetrics.max\nmulticlassEval.evaluate(bestModel.transform(testData))",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 14:09:32.498",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res28: Double \u003d 0.7478531189887332\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d835",
+            "http://172.17.0.2:4040/jobs/job?id\u003d836"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590152597989_-796629677",
+      "id": "20200522-130317_1229157620",
+      "dateCreated": "2020-05-22 13:03:17.989",
+      "dateStarted": "2020-05-22 14:09:32.535",
+      "dateFinished": "2020-05-22 14:09:35.060",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Categorical features",
+      "text": "import org.apache.spark.sql.functions._\nimport org.apache.spark.mllib.linalg.Vector\n\ndef unencodeOneHot(data: DataFrame): DataFrame \u003d {\n val wildernessCols \u003d (0 until 4).map(i \u003d\u003e s\"Wilderness_Area_$i\").toArray\n val wildernessAssembler \u003d new VectorAssembler().setInputCols(wildernessCols).setOutputCol(\"wilderness\")\n val unhotUDF \u003d udf((vec: Vector) \u003d\u003e vec.toArray.indexOf(1.0).toDouble)\n val withWilderness \u003d wildernessAssembler.transform(data).drop(wildernessCols:_*).withColumn(\"wilderness\", unhotUDF($\"wilderness\"))\n val soilCols \u003d (0 until 40).map(i \u003d\u003e s\"Soil_Type_$i\").toArray\n val soilAssembler \u003d new VectorAssembler().setInputCols(soilCols).setOutputCol(\"soil\")\n \n soilAssembler.transform(withWilderness).drop(soilCols:_*).withColumn(\"soil\", unhotUDF($\"soil\"))\n}",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 14:11:05.450",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.functions._\nimport org.apache.spark.mllib.linalg.Vector\nunencodeOneHot: (data: org.apache.spark.sql.DataFrame)org.apache.spark.sql.DataFrame\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1590152796722_-76992306",
+      "id": "20200522-130636_865101410",
+      "dateCreated": "2020-05-22 13:06:36.722",
+      "dateStarted": "2020-05-22 14:03:52.436",
+      "dateFinished": "2020-05-22 14:03:52.812",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Add stages to pipeline",
+      "text": "import org.apache.spark.ml.feature.VectorIndexer\n\nval inputCols \u003d trainData.columns.filter(_ !\u003d \"Cover_Type\")\nval assembler \u003d new VectorAssembler().setInputCols(inputCols).setOutputCol(\"featureVector\")\nval indexer \u003d new VectorIndexer().setMaxCategories(40).setInputCol(\"featureVector\").setOutputCol(\"indexedVector\")\nval classifier \u003d new RandomForestClassifier().setSeed(Random.nextLong()).setLabelCol(\"Cover_Type\").setFeaturesCol(\"indexedVector\").setPredictionCol(\"prediction\")\nval pipeline \u003d new Pipeline().setStages(Array(assembler, indexer, classifier))",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 14:11:54.053",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.ml.feature.VectorIndexer\ninputCols: Array[String] \u003d Array(Elevation, Aspect, Slope, Horizontal_Distance_To_Hydrology, Vertical_Distance_To_Hydrology, Horizontal_Distance_To_Roadways, Hillshade_9am, Hillshade_Noon, Hillshade_3pm, Horizontal_Distance_To_Fire_Points, Wilderness_Area_0, Wilderness_Area_1, Wilderness_Area_2, Wilderness_Area_3, Soil_Type_0, Soil_Type_1, Soil_Type_2, Soil_Type_3, Soil_Type_4, Soil_Type_5, Soil_Type_6, Soil_Type_7, Soil_Type_8, Soil_Type_9, Soil_Type_10, Soil_Type_11, Soil_Type_12, Soil_Type_13, Soil_Type_14, Soil_Type_15, Soil_Type_16, Soil_Type_17, Soil_Type_18, Soil_Type_19, Soil_Type_20, Soil_Type_21, Soil_Type_22, Soil_Type_23, Soil_Type_24, Soil_Type_25, Soil_Type_26, Soil_Type_27, Soil_Type_28, Soil_Type_29, Soil_Type_30, Soil_Typ..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1590153271674_-2125950033",
+      "id": "20200522-131431_1618000656",
+      "dateCreated": "2020-05-22 13:14:31.674",
+      "dateStarted": "2020-05-22 14:03:52.871",
+      "dateFinished": "2020-05-22 14:03:53.138",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Features importances",
+      "text": "import org.apache.spark.ml.classification.RandomForestClassificationModel\n\nval forestModel \u003d bestModel.asInstanceOf[PipelineModel].stages.last.asInstanceOf[RandomForestClassificationModel]\nforestModel.featureImportances.toArray.zip(inputCols).sorted.reverse.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 14:12:13.737",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "(0.3811248842167392,Elevation)\n(0.09012386863402522,Wilderness_Area_3)\n(0.07163374260127979,Wilderness_Area_0)\n(0.06758201113399565,Horizontal_Distance_To_Roadways)\n(0.042557627943109536,Horizontal_Distance_To_Fire_Points)\n(0.03330952931483114,Soil_Type_37)\n(0.03071798981479728,Soil_Type_38)\n(0.029776005478469737,Wilderness_Area_2)\n(0.02825272638644425,Soil_Type_9)\n(0.025094822391421728,Soil_Type_3)\n(0.02112824482714222,Soil_Type_11)\n(0.01804143697042587,Soil_Type_21)\n(0.014628971567366061,Horizontal_Distance_To_Hydrology)\n(0.013401959154099762,Hillshade_Noon)\n(0.013268449356908634,Soil_Type_1)\n(0.012182395490674632,Soil_Type_39)\n(0.011165433802245318,Soil_Type_22)\n(0.009945264519914988,Aspect)\n(0.009711996261967516,Wilderness_Area_1)\n(0.009222412420168597,Hillshade_9am)\n(0.008496292246128401,Vertical_Distance_To_Hydrology)\n(0.008061142518864327,Soil_Type_28)\n(0.007116364692010152,Hillshade_3pm)\n(0.006973414855547931,Soil_Type_29)\n(0.006229480241727989,Slope)\n(0.0056817741554457835,Soil_Type_12)\n(0.004927740222665516,Soil_Type_31)\n(0.004851455629783293,Soil_Type_5)\n(0.0029499004487974815,Soil_Type_32)\n(0.0026801913954026813,Soil_Type_10)\n(0.0025913008495177096,Soil_Type_2)\n(0.0011184754868063778,Soil_Type_36)\n(9.617839959245866E-4,Soil_Type_16)\n(8.919810145917127E-4,Soil_Type_34)\n(7.005537060714872E-4,Soil_Type_23)\n(4.439491417026017E-4,Soil_Type_17)\n(4.406795404918207E-4,Soil_Type_30)\n(3.8247438898060873E-4,Soil_Type_19)\n(2.919718097945586E-4,Soil_Type_4)\n(2.709226486944346E-4,Soil_Type_8)\n(2.2495435313495956E-4,Soil_Type_18)\n(1.792649544819531E-4,Soil_Type_15)\n(1.3945540440752307E-4,Soil_Type_0)\n(1.1956541774582326E-4,Soil_Type_13)\n(1.1933225823420163E-4,Soil_Type_25)\n(1.1501995948058976E-4,Soil_Type_33)\n(5.4139902158288664E-5,Soil_Type_27)\n(4.667388566546591E-5,Soil_Type_26)\n(4.0457605664444144E-5,Soil_Type_24)\n(2.411539604540557E-5,Soil_Type_20)\n(4.914604410590442E-6,Soil_Type_7)\n(4.849835942300233E-7,Soil_Type_35)\n(0.0,Soil_Type_6)\n(0.0,Soil_Type_14)\nimport org.apache.spark.ml.classification.RandomForestClassificationModel\nforestModel: org.apache.spark.ml.classification.RandomForestClassificationModel \u003d RandomForestClassificationModel (uid\u003drfc_30aa0955f6de) with 20 trees\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1590153649200_1574115331",
+      "id": "20200522-132049_1486163842",
+      "dateCreated": "2020-05-22 13:20:49.200",
+      "dateStarted": "2020-05-22 14:04:07.026",
+      "dateFinished": "2020-05-22 14:04:07.398",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Make prediction",
+      "text": "bestModel.transform(testData.drop(\"Cover_Type\")).select(\"prediction\").show()",
+      "user": "anonymous",
+      "dateUpdated": "2020-05-22 14:12:27.502",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----------+\n|prediction|\n+----------+\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       6.0|\n|       3.0|\n|       6.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n|       3.0|\n+----------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://172.17.0.2:4040/jobs/job?id\u003d827"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1590156246988_-1458324896",
+      "id": "20200522-140406_911256316",
+      "dateCreated": "2020-05-22 14:04:06.988",
+      "dateStarted": "2020-05-22 14:04:38.795",
+      "dateFinished": "2020-05-22 14:04:39.264",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1590156263330_1454714092",
+      "id": "20200522-140423_626673473",
+      "dateCreated": "2020-05-22 14:04:23.330",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }
@@ -19,7 +1474,10 @@
   "id": "2FAHQR3P4",
   "noteParams": {},
   "noteForms": {},
-  "angularObjects": {},
+  "angularObjects": {
+    "sh:shared_process": [],
+    "spark:shared_process": []
+  },
   "config": {
     "isZeppelinNotebookCronEnable": false
   },
