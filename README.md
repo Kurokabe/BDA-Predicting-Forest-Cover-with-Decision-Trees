@@ -68,7 +68,8 @@ Pour tester et évaluer nos modèles, nous avons utilisé l'accuracy qui se calc
 Nous obtenons une accuracy qui atteint environ les 74%.
 
 ## Résultats des questions
-1) Concernant la répartition du dataset, on peut constater une très grande disproportion. 
+### Quelles données peuvent être utiles à visualiser et comment les visualiser ?
+Concernant la répartition du dataset, on peut constater une très grande disproportion. 
 ![](https://i.imgur.com/rOlgQSY.png)
 Deux classes consistent en 85% du dataset alors que les 15% restants sont répartis parmis les 5 autres classes. On peut en déduire qu'avoir une grande quantité de donnée c'est bien, mais encore faut-il que cela soit réparti de manière uniforme. Si une classe est peu représenté, le modèle peut ne pas bien apprendre de celle-ci.
 
@@ -94,15 +95,22 @@ Si l'on affiche avec en abscisse l'Horizontal_Distance_To_Roadways, on distingue
 
 ![](https://i.imgur.com/1bMZZn7.png)
 
-2) Après avoir exécuté le modèle en augmentant le nombre de features utilisés : 
+### Est-ce que toutes les features sont utiles ? Peut-on en supprimer afin d'améliorer le modèle ?
+Après avoir exécuté le modèle en augmentant le nombre de features utilisés : 
+
 ![](https://i.imgur.com/Arfp3JH.png)
+
 On peut voir que la précision varie très peu selon si l'on utilise 1 features ou les 54 features à disposition. Néanmoins, avec 6 features, on arrive à un très bon résultat puisqu'on peut représenter 70% des données. Plus on ajoute de features, plus elles peuvent se contredire entre-elle dans les decisions tree ou overfiter sur les données d'entrainement.
-3) Nous avons essayé de faire varier la taille des données d'entraînement et de test et voici les résultats : 
+
+### Quel est l'impact de la quantité de données sur les performances de l'arbre de décision ?
+Nous avons essayé de faire varier la taille des données d'entraînement et de test et voici les résultats : 
+
 ![](https://i.imgur.com/ppIthfj.png)
+
 On voit là aussi que les résultats varient peu entre 20% des données pour l'entraînement ou 90%. On peut déduire que pour ce cas d'utilisation, environ 100'000 données sont largement suffisantes pour avoir de bon résultat. Avoir plus de données n'améliore pas significativement le modèle et cause un temps d'entraînement plus long.
 
 ## Améliorations futures possibles
 
 ### Utiliser un dataset equilibré
-Nous avons remarqué que le dataset n'est pas dutout equilibré. Il serait donc envisageable de supprimer certaines données afin de l'équilibrer. Ceci aurait également pour conséquence de résuire grandement le temps de d'apprentissage.
-De plus nous avons constaté que la quantié de données n'as pas un impact très grand sur les performances du modèle.
+Nous avons remarqué que le dataset n'est pas du tout équilibré. Il serait donc envisageable de supprimer certaines données afin de l'équilibrer. Ceci aurait également pour conséquence de réduire grandement le temps d'apprentissage.
+De plus nous avons constaté que la quantié de données n'a pas un impact très grand sur les performances du modèle.
